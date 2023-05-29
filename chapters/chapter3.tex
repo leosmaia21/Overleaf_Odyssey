@@ -147,7 +147,7 @@ I will refer to the first algorithm as copy paste augmentation and to the second
 \subsection{Copy paste augmentation}
 The augmentation copy paste method used, consists of copying annotated objects and pasting them in areas where it is very certain that there are no unannotated objects.
 
-In creating the base dataset, only a small portion of the LRM images were used, leaving a large amount of potential crops with unannotated backgrounds. From here it would be easy to use the segmentation already provided for the archaeological sites, crop and paste in these backgrounds. However, there is one problem, the provided annotations do not result in intensive terrain analysis, leaving the possibility of unannotated sites, which means one cannot If the algorithm crops an image, where there is an unannotated site, this would lead to deterioration of the deep learning algorithm.
+In the creation of the base dataset, only a small portion of the LRM images were used, leaving a large amount of potential crops with unannotated backgrounds. From here it would be easy to use the segmentation already provided for the archaeological sites, crop and paste in these backgrounds. However, there is one problem, the provided annotations do not result in intensive terrain analysis, leaving the possibility of unannotated sites, which means one cannot If the algorithm crops an image, where there is an unannotated site, this would lead to deterioration of the deep learning algorithm.
 
 It becomes necessary for the copy paste algorithm to be able to discard backgrounds with possible unannotated sites, which is in itself a paradox, since the objective of the project is to detect unannotated sites. To do this we used the yolov5 model trained on the base dataset. This model then becomes responsible for analyzing candidate crops, discarding all those that have possible new sites. 
 
@@ -176,6 +176,8 @@ In the next two images it is possible to see part of the LRM image of Paredes de
     \caption{Croppred image from Paredes de Coura LRM on the left, and the same image with the LBR on the right}%
 \end{figure}
 
+Using these two methods, the dataset was then created, it is worth mentioning that before pasting the annotation, one of the following geometric transformations was applied: flip left to right, flip top to bottom, rotate 90, 180 or 270 degrees and transpose. For each annotation a transformation was randomly selected selectively and then applied.
+
 Additionally, 10\% background was added, following yolov5's recommendations.
 
 Along with the respective labels for the yolo, labels with the segmentation were also saved, which will be used later in Unet.
@@ -191,7 +193,7 @@ In the following two images, there are two examples of the copy paste augmentati
     \caption{Examples of copy paste augmentation}%
 \end{figure}
 
-In the two following tables are the results from copy paste augmentation.
+The two following tables contain the results from copy paste augmentation.
 
 \begin{table}[H]
 \centering
@@ -205,7 +207,7 @@ In the two following tables are the results from copy paste augmentation.
  Validation set & 391 & 2611  \\[1ex]
  \hline
 \end{tabular}
-\caption{Tumulis dataset}
+\caption{Tumulis copy paste dataset}
 \end{table} 
 
 \begin{table}[H]
@@ -220,25 +222,61 @@ In the two following tables are the results from copy paste augmentation.
  Validation set & 256 & 1071  \\[1ex]
  \hline
 \end{tabular}
-\caption{Hillforts dataset}
+\caption{Hillforts copy paste dataset}
 \end{table} 
 
 
 \subsection{Simple augmentation}
-The second augmentation algorithm, which will be called simple augmentation, which as the name indicates, is much simpler than the first one, this one is based on centering each object in a 640x640 pixels box and moving the box randomly, after that verify if the object is completely inside the box, as well as other nearby objects, if all the objects are inside the box, one of the same transformations of the previous algorithm is applied, but not to the object itself but to the image, finally the images are saved as well as the labels
+The second augmentation algorithm, referred to as "simple augmentation," is a much more straightforward approach compared to the first one. It involves centering each object within a 640x640 pixel box and randomly shifting the box. Subsequently, the algorithm verifies if the object, along with other nearby objects, remains completely inside the box. If all the objects are contained within the box, a similar transformation to the previous algorithm is applied, not to the individual object but to the entire image. Finally, the modified images and their corresponding labels are saved.
 
-This way it is possible to have the same annotation but in a different position of the image, with different backgrounds.
+This method was applied several times for the same annotation enabling the generation of annotated data that retains the same objects but positions them differently within the image, resulting in varied backgrounds.
 
-%\subsection{Augmentation results}
-%
-%
-%
-%Following this recommendation for the copy paste increase, a dataset was generated for the 2754 images containing a total of 18398 tummies, noteworthy that within these 2754, 130 are from the original dataset.
-%
-%For the simple augmentation, not as many as recommended were used, 1380 images were generated, with a total of 3124 tummies.
-%
-%For the hillforts, with copy paste augmentation, 2464 images were generated, with a total of 6925, also here the 140 images are from the original dataset. Here the number of castros was reduced a little, not reaching the recommended 10000, due to their size, usually large objects, the image would be too populated and unrealistic.
-%
-%For the simple augmentation 815 images were generated with a total of 844 hillforts.
-%
-%FALTA AQUI alterar o numero dos castros que estao mal
+The next images show examples of the same annotation but on different images resulting from the augmentation.
+
+\begin{figure}[H]
+    \centering
+    \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/mamoas1.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/mamoas2.png} }}%
+    \caption{Example of the same tumuli but in different position of the image}%
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/castros1.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/castros2.png} }}%
+    \caption{Example of the same hillforts but in different position of the image}%
+\end{figure}
+
+The next two tables show the results of the dataset creation.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3cm}|p{2.5cm}|p{2cm}|} 
+\hline
+\multicolumn{3}{|c|}{Tumulis} \\
+ \hline
+  Set & Images & Annotations\\ [0.5ex] 
+ \hline
+ Training set & 1171 & 2658 \\ 
+ Validation set & 209 & 466  \\[1ex]
+ \hline
+\end{tabular}
+\caption{Tumulis simple dataset}
+\end{table} 
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|p{3cm}|p{2.5cm}|p{2cm}|} 
+\hline
+\multicolumn{3}{|c|}{Hillforts} \\
+ \hline
+  Set & Images & Annotations\\ [0.5ex] 
+ \hline
+ Training set & 691 & 716 \\ 
+ Validation set & 124 & 128  \\[1ex]
+ \hline
+\end{tabular}
+\caption{Hillforts simple dataset}
+\end{table} 
