@@ -37,7 +37,7 @@ Finally, the training results of the trained models will be analyzed.
 \section{YOLO}
 While the 3 methods presented, RCNN, Fast RCNN, and Faster RCNN, all of them run the image several times through the algorithm, YOLO comes with a different idea, the image only passes through the model once.
 
-For this, the image is divided into a grid with several cells, the image is then processed by the model, generating a two dimensional tensor, with the number of rows equal to the number of cells, and columns equal to 5 + number of object classes. In other words, each cell has a vector associated with the probability of having an object with the central point of the bounding box inside it.
+For this, the image is divided into a grid\cite{yolodeepdive} with several cells, the image is then processed by the model, generating a two dimensional tensor, with the number of rows equal to the number of cells, and columns equal to 5 + number of object classes. In other words, each cell has a vector associated with the probability of having an object with the central point of the bounding box inside it.
 
 y = [pc, cx, cy, w, h, c0, c1, c2,...].
 
@@ -107,7 +107,7 @@ Accuracy is the ratio between all correct predictions and all predictions genera
 \begin{equation}
      Accuracy = \frac{TP + TN}{TP + TN + FP + FN}
 \end{equation}
-Two other values that can be obtained are accuracy and recall\cite{https://towardsdatascience.com/on-object-detection-metrics-with-worked-example-216f173ed31e}. Precision refers to what percentage of the predictions made are true positives,in other words, how accurate is the model in identifying only relevant objects, and is given by the following formula:
+Two other values that can be obtained are accuracy and recall\cite{yoloMetrics}. Precision refers to what percentage of the predictions made are true positives,in other words, how accurate is the model in identifying only relevant objects, and is given by the following formula:
 
 \begin{equation}
      Precision = \frac{TP }{TP + FP}
@@ -130,8 +130,7 @@ For a detected object to be considered a true positive, it is necessary that the
 \begin{figure}[H]
 \centering
 \includegraphics[height=8cm]{images/IOU.png}
-\caption{Example of IoU \cite{Deep Learning for Archaeological Object Detection on LiDAR:
-New Evaluation Measures and Insights}}
+\caption{Example of IoU \cite{IOUpaper}}
 \end{figure}
 
 Having the APs of all classes, the mAP is then calculated by taking the average of the APs, however in this project separate models were trained for each class, making the AP equal to the mAP.
@@ -247,7 +246,7 @@ Once the inference is completed, the identified objects undergo validation using
 
 Finally, due to the window slide, for the same object there may be several inferences, because when making the slide the same object may still appear in the next image. To mitigate this, initially the Euclidean distance was used, all the bounding boxes that had the center less than 15 pixels, which corresponds to 7.5 meters on the ground, from another one, would be removed. Initially this approach worked well for the tumuli. However, for the hillforts, a problem occurred, the yolo was detecting hillforts inside larger hillforts, something that does not happen in reality, making it difficult to choose a threshold value for the Euclidean distance. 
 
-In order to get around this, the Euclidean distance was replaced by IoU, as explained before, if the IoU was smaller than a certain value, the smaller hill was discarded, however, the problem still remains, as I checked later in article \cite{Deep Learning for Archaeological Object Detection on LiDAR}, if the smaller hillfort is fully contained in the larger one and if the area of the smaller one is smaller than the defined threshold value, IoU does not discard, so the problem still remains. So the approach was adopted, instead of being the normal IoU the intersection. Therefore, instead of using the normal IoU, the intersection to be divided by the union, the division of the intersection to be divided by the area of the smallest detection was used. But before that the objects were ordered by area, from the biggest to the smallest, by doing that and using this modified version of the IoU, in the cases where there are detections completely contained inside another, or almost completely contained, they are removed, keeping the biggest one.
+In order to get around this, the Euclidean distance was replaced by IoU, as explained before, if the IoU was smaller than a certain value, the smaller hill was discarded, however, the problem still remains, as I checked later in article \cite{IOUpaper}, if the smaller hillfort is fully contained in the larger one and if the area of the smaller one is smaller than the defined threshold value, IoU does not discard, so the problem still remains. So the approach was adopted, instead of being the normal IoU the intersection. Therefore, instead of using the normal IoU, the intersection to be divided by the union, the division of the intersection to be divided by the area of the smallest detection was used. But before that the objects were ordered by area, from the biggest to the smallest, by doing that and using this modified version of the IoU, in the cases where there are detections completely contained inside another, or almost completely contained, they are removed, keeping the biggest one.
 
 In the end, the results are saved in a csv file, containing the geographic coordinates of the bounding box, the confidence given by yolo and the result of the LOF validation.
 
@@ -280,7 +279,7 @@ In order to train the model, jakteristics library was used, this library allows 
 As each point contributed 14 features, this results in a huge amount of features, the mean, median, variance, standard deviation and covariance are calculated, resulting in an amount of 70 features per .las file.
 
 \subsection{Inference results}
-In this sub-section we will show the results of the inferences made on the 4 LRM images.
+In this sub-section it will be showed the results of the inferences made on the 4 LRM images. For this, a script was created, in which the annotations were loaded as well as the results, both the inference results and the annotations were converted to polynomials using the shapely library, then in an interactive way it was checked if any ground truth was intersected by any inference, if so it was accounted for, if there was more than one inference to intersect, only the first one was accounted for as a true positive and all the others as false positives.
 
 Tables will be presented, in which will appear the total number of detected objects, within these objects the number of validations made by the LOF, as well as the true positives, false positives and false negatives, the last 3 are in relation to the total number of detected objects and not to the ones validated by the LOF.
 
@@ -297,7 +296,7 @@ Tables will be presented, in which will appear the total number of detected obje
  False negatives & 36 & 52 & 66 & 34 \\ [1ex] 
  \hline
 \end{tabular}
-\caption{Results of inference for tumulis}
+\caption{Results of inference for tumulis(YOLOv7)}
 \end{table}
 
 \begin{table}[H]
@@ -313,7 +312,7 @@ Tables will be presented, in which will appear the total number of detected obje
  False negatives & 10 & 10 & 50\\ [1ex] 
  \hline
 \end{tabular}
-\caption{Results of inference for hillforts}
+\caption{Results of inference for hillforts(YOLOv7)}
 \end{table}
 It is important to emphasize that the false positives and true positives are relative to the available ground truth, i.e. the training and validation data, and as said before, these data are not the result of an intensive terrain analysis, and there may be among the false positives that are in fact true positives, i.e. new sites discovered by the algorithm that have not yet been annotated.
 

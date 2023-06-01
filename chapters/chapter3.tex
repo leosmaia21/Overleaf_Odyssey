@@ -9,22 +9,22 @@ In this chapter, it will be discussed various ways of applying artificial intell
 
 
 
-Deep learning is a subtype of artificial intelligence, which relies on neural networks in order to recognize patterns in given training data. When trained on a dataset, the network is able to learn many features of the dataset, becoming able to make predictions when presented with new data.
+Deep learning is a subtype of artificial intelligence, which relies on neural networks in order to recognize patterns in the given training data. When trained on a dataset, the network is able to learn many features about it, making it capable of making predictions when presented with new data.
 
 
-%One of the pillars of deep learning is the diversity of the dataset, and also the precision of the training annotations, because the model will be able to learn small possible variations in the data, reducing the risk of overfitting, therefore a good dataset is fundamental, however it is not always possible to obtain a dataset that represents all the input possibilities.
+%Two of the pillars of deep learning are the diversity of the dataset, and also the precision of the training annotations. Since the model will be able to learn small possible variations in the data, thus reducing the risk of overfitting, a good dataset is fundamental, even though it is not always possible to obtain a dataset that represents all the input possibilities.
 
 %\subsubsection{Overfitting}
-%Overffiting occurs when a model performs very well on training data, yet when presented with new data has difficulty making correct predictions. This can occur for several reasons:
+%Overffiting occurs when a model performs very well on training data, yet when presented with new data has trouble making accurate predictions. This can occur for several reasons:
 %\begin{itemize}
 %\item There is too little training data, creating a dataset that is unrepresentative of all possible inputs.
 %
-%\item The model is trained for a long time and thus, without stopping early, increasingly makes the model only an expert on the given type of training data.
+%\item The model is trained for a long time and thus, without an early stop, increasingly makes the itself only an expert on the given type of training data.
 %
 %\item The model is too complex, causing it to learn not only the necessary predictive features, but also the noise that the inputs may have.
 %\end{itemize}
 
-To perform the Odyssey project, the Alto Minho region, Portugal, was chosen. With the help of the Comunidade Intermunicipal do Alto Minho, LiDAR data of 2018 was collected, covering 2220 km2, being later applied the visualization technique, more specifically LRM. As a result of this process 4 LRM images were generated, corresponding to 4 sub-regions of Alto Minho: Viana do Castelo, Paredes de Coura, Arcos de Valdevez and Parque Nacional da Peneda-Gêrez, with each pixel corresponding to 0.5 meters on the terrain.
+To perform the Odyssey project, the Alto Minho region, in Portugal, was chosen. With the help of the Comunidade Intermunicipal do Alto Minho\cite{comunidadeAltoMinho}, LiDAR data of 2018 was collected, covering 2220 km2, to which later was applied the visualization technique, more specifically LRM. As a result of this process 4 LRM images were generated, corresponding to 4 sub-regions of Alto Minho: Viana do Castelo, Paredes de Coura, Arcos de Valdevez and Parque Nacional da Peneda-Gêrez, having a correspondence of 0.5 meters on the terrain per pixel.
 From these 4 sub-regions, the locations of all known tumuli and castros were also provided.
 
 The following table shows the resolution of each image, as well as the number of known annotations and the image size.
@@ -62,7 +62,7 @@ In the two following images, there are two examples of annotations of tumuli on 
 
 
 
-%That said, in this project the amount of data provided is relatively small \cite{yolov5recomedacoes}, as you can see, it is recommended to use for each type of object more than 1500 images and more than 10000 annotations to have good results, and since YOLOv7 is a relatively large model, this is even more important, due to the possibility of the weights not converge all if the dataset is small, and that is what this section is about, creation of the dataset, as well its augmentation.
+%That said, in this project the amount of data provided is relatively small \cite{yolov5recomedacoes}, as you can see, it is recommended to use for each type of object more than 1500 images and more than 10000 annotations to achieve good results. Since YOLOv7 is a relatively large model, this is even more important, due to the possibility of the weights not converge all if the dataset is small, and that is what this section is about, creation of the dataset, as well its augmentation.
 
 \section{Creation of the base dataset}
 
@@ -126,7 +126,7 @@ The next two tables show the results of the dataset creation.
 Deep Learning has revolutionized the field of artificial intelligence, enabling significant advances in areas such as image recognition, natural language processing, and many other complex domains. However, for Deep Learning models to reach their full potential, it is essential to overcome challenges such as sparse training data and limited generalization.
 
 The main reason augmentation is so important is the ability to improve the generalizability of Deep Learning models. With more examples available for training, the model is exposed to a wider variety of cases and patterns, allowing it to learn more robust and variation-resistant features, avoiding overfiting.
-Overffiting occurs when a model performs very well on training data, yet when presented with new data has difficulty making correct predictions. This can occur for several reasons\cite{https://aws.amazon.com/what-is/overfitting/}:
+Overffiting occurs when a model performs very well on training data, yet when presented with new data has difficulty making correct predictions. This can occur for several reasons\cite{nonmaxsurpression}:
 \begin{itemize}
 \item There is too little training data, creating a dataset that is unrepresentative of all possible inputs.
 
@@ -153,7 +153,7 @@ It becomes necessary for the copy paste algorithm to be able to discard backgrou
 
 Since the model was trained on limited data, it is extremely sensitive, so it ends up detecting many shapes that are actually false positives. It is because of this sensitivity that the model is useful in discarding possible crops, and since the background is quite large, even if the model discards many images, the background is not compromised.
 
-A second problem that arises from the copy paste algorithm, is the choice of the paste location. When choosing randomly, it is possible that the archaeological site will be over a river, house, road and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Local Based Rank) technique was used. This technique consists in classifying the soil areas as subsoil or land-used. For this, the Land-use and Occupation charter of Portugal was used. This charter is basically a comprehensive document that provides detailed information about the various types of land use and occupation in Portugal. It serves as a reliable reference for categorizing soil areas into subsoil or land-used regions.
+A second problem that arises from the copy paste algorithm, is the choice of the paste location. When choosing randomly, it is possible that the archaeological site will be over a river, house, road and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Local Based Rank) technique was used. This technique consists in classifying the soil areas as subsoil or land-used. For this, the Land-use and Occupation charter of Portugal\cite{charterPortugal} was used. This charter is basically a comprehensive document that provides detailed information about the various types of land use and occupation in Portugal. It serves as a reliable reference for categorizing soil areas into subsoil or land-used regions.
 
 The LBR technique utilizes this charter to determine the classification of soil areas. By referencing the specific guidelines and classifications outlined in the charter, the technique can accurately label each area as either subsoil or land-used, thereby providing valuable context for the augmentation process.
 
@@ -227,7 +227,7 @@ The two following tables contain the results from copy paste augmentation.
 
 
 \subsection{Simple augmentation}
-The second augmentation algorithm, referred to as "simple augmentation," is a much more straightforward approach compared to the first one. It involves centering each object within a 640x640 pixel box and randomly shifting the box. Subsequently, the algorithm verifies if the object, along with other nearby objects, remains completely inside the box. If all the objects are contained within the box, a similar transformation to the previous algorithm is applied, not to the individual object but to the entire image. Finally, the modified images and their corresponding labels are saved.
+The second augmentation algorithm, referred to as simple augmentation, is a much more straightforward approach compared to the first one. It involves centering each object within a 640x640 pixel box and randomly shifting the box. Subsequently, the algorithm verifies if the object, along with other nearby objects, remains completely inside the box. If all the objects are contained within the box, a similar transformation to the previous algorithm is applied, not to the individual object but to the entire image. Finally, the modified images and their corresponding labels are saved.
 
 This method was applied several times for the same annotation enabling the generation of annotated data that retains the same objects but positions them differently within the image, resulting in varied backgrounds.
 

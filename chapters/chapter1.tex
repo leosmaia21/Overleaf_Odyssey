@@ -5,7 +5,7 @@
 
 This chapter provides an introduction to the topic of the dissertation. It describes the problems that were tried to be solved and the motivation behind them.
 \section{Motivation}
-\cite{https://doi.org/10.48550/arxiv.2103.00020} Cultural and archaeological heritage is one of the main vehicles of cultural diversity and also a way to preserve our history so that we can learn from the past and improve the future. Archaeology offers tools with which to understand how societies functioned and to understand why the world and human society have changed.
+Cultural and archaeological heritage is one of the main vehicles of cultural diversity and also a way to preserve our history so that we can learn from the past and improve the future. Archaeology offers tools with which to understand how societies functioned and to understand why the world and human society have changed.
 
 The problem: 
 Discovering a site rich in historical materials is the dream of any archaeologist. Revealing to humanity a piece of its history that has been hidden for centuries, or thousands of years
@@ -14,7 +14,7 @@ To mitigate the costs inherent in this activity, investments are being made in t
 geographic regions that are more likely to find archaeological objects. In this way, the excavation team can work more efficiently, saving time and money.
 efficiency, saving time and money.
 
-One of the reasons for this dissertation is the fact that the most common collection of archaeological information consists of walks in large fields. The ODDYSEY project consists of automating this process by using methods that in recent years have been increasingly used in archaeology, such as artificial intelligence and LIDAR (Light Detection and Ranging), which is encouraged by UNESCO and scientific communities[1], including all remote sensing techniques.
+One of the reasons for this dissertation is the fact that the most common collection of archaeological information consists of walks in large fields. The ODDYSEY project consists of automating this process by using methods that in recent years have been increasingly used in archaeology, such as artificial intelligence and LIDAR (Light Detection and Ranging), which is encouraged by UNESCO and scientific communities\cite{asmr}, including all remote sensing techniques.
 Remote sensing is the name given to all non-invasive techniques that use non-direct contact to observe targets of interest, either on the face of the earth or from below[2], one of which is LIDAR.
 
 LIDAR is a technology that enables light lasers to measure distances from objects, thus allowing the creation of 3D models of environments. By measuring the time it takes for the light to travel to the object and back, LIDAR can accurately determine the distance to the object.
@@ -22,10 +22,15 @@ LIDAR is a technology that enables light lasers to measure distances from object
 Another technique that has been used a lot in recent years in conjunction with remote sensing is artificial intelligence, more precisely convolution neural network (CNN). This technique allows the algorithm itself to learn through training the necessary filters, which allow extracting relevant features from images, can be adapted automatically for different types of data and contexts. Furthermore, convolution neural networks are also capable of handling high-resolution and complex images, enabling higher accuracy in real-time object detection and classification. This makes remote sensing technology even more effective.
 
 
+
+
+The utilization of artificial intelligence tools has experienced a rapid surge in recent years\cite{aumentoexpDL}. Various techniques, such as classical random forest machine learning, have been employed to identify archaeological mounds in regions like Mesopotamia, Pakistan, and Jordan \cite{LIDARCOMDL}. The adoption of deep learning techniques has seen a notable increase in conjunction with LIDAR technology, likely due to the prevalence of tubular structures with archaeological significance worldwide \cite{LIDARCOMDL}. Among the subjects investigated in this dissertation are tumuli, which are also characterized by their tubular and uniform nature.
+
+
 \section{Objectives}
 The goal of the ODYSSEY project, funded by COMPETE - Competitiveness and Internationalization Thematic Operational Programme and Regional Operational Programmes, in its FEDER component, under the PORTUGAL2020 Programme, is to develop an integrated geographic information platform for archaeologists and heritage technicians that allows the consolidation of various sources of heritage information, whether public or private, or directly from the field for specific purposes, through non-intrusive methods (e. g, LiDAR, multispectral imaging) and automate their further processing in order to identify archaeological elements and produce complementary information.
 
-The project is divided into two parts, pre-processing of lidar data and the detection of archaeological areas, in this dissertation only the detection part was done, having already access to the processed data, in the form of 4 tif images, each one representing an area of Viana do Castelo.
+The project is divided into two parts, pre-processing of lidar data and the detection of archaeological areas, in this dissertation only the detection part was done, having already access to the processed data, in the form of 4 LRM images, each one representing a sub area of Alto Minho.
 
 Initially the dataset was prepared, only relative to the tumuli, for that was used 2 methods of augmentation, then was trained the model YOLOv7 and a model LOF (local outlier factor) with the raw data of lidar.
 Finally, an inference was made on the images in order to locate new zones, since the annotations were not obtained through a deep analysis of the analyzed zones, making there are other undiscovered archelogical objects.
