@@ -131,7 +131,7 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% | auxiliar convidado     |
 %%% --------------------------
 %% Supervisor information
-\Supervisor{(nome do orientador)}{associado}
+\Supervisor{António Neves}{associado}
 
 %%% OPTIONAL: you can add a second supervisor.
 %%%
@@ -147,7 +147,7 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% school    : University/Scholl name; Choose the
 %%%             preposition accordingly.
 %% Optional SecondSuperviser information
-\SecondSupervisor{(co-orientador)}{auxiliar convidado}{do Departamento de Matemática}{da Universidade de Aveiro}
+\SecondSupervisor{Pétia Georgieva}{associada}{do Departamento de Eletrónica, Telecomunicações e Informática}{da Universidade de Aveiro}
 
 %%% Edit your degree information.
 %%%
@@ -156,31 +156,39 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% title: Degree title (Mestre or Doutor)
 %%% name : Degree name
 %% Degree title and name
-\Degree{Mestre}{Engenharia Informática}
+\Degree{Mestre}{Engenharia Eletrónica e Telecomunicações}
 
 %%% OPTIONAL: edit grant support texts where
 %%%  appropriate. Maximum two.
 %%%
 %%% \GrantText{grant1}{grant2}
 %% Optional Grant support texts
-\GrantText{Texto Apoio financeiro do POCTI no âmbito do III Quadro Comunitário de Apoio.}
-          {Texto Apoio financeiro da FCT e do FSE no âmbito do III Quadro Comunitário de Apoio.}
+%\GrantText{Texto Apoio financeiro do POCTI no âmbito do III Quadro Comunitário de Apoio.}
+   %       {Texto Apoio financeiro da FCT e do FSE no âmbito do III Quadro Comunitário de Apoio.}
 
 %%% OPTIONAL: Add a dedication text.
 %% Optional Dedication text
-\Dedication{Dedico este trabalho a...}
+%\Dedication{Dedico este trabalho a...}
 
 %%% OPTIONAL: Add an acknowledgement text
 %% Optional Acknowledgement text
-\Acknowledgements{Agradeço toda a ajuda a todos os meus colegas e companheiros.}
+\Acknowledgements{I would like to thank all the people who made this dissertation possible.
+To all the professors who spent time after class explaining concepts often unrelated to the curricular unit.
+
+To professor António Neves a special thanks for accepting to be my tutor, to professor Petia Georgieva for all help and to Daniel Canedo for all help and advice.
+
+To my parents who during all these years have made an effort so that I lacked nothing.
+
+And finally to all my friends, especially Guilherme Maniezo, who during these years accompanied me in good and bad moments.}
 
 %%% Edit the keywords and abstract in Portuguese
 %%% Don't forget to remove the \blindtext[3]
 %%%  declaration.
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation
 %% Mandatory Keywords and Abstract in Portuguese
-\Abstract{Palavras Chave}{texto livro, arquitetura, história, construção, materiais de construção, saber tradicional.}
-         {Resumo}{\selectlanguage{portuguese}Um resumo é um pequeno apanhado de um trabalho mais longo (como uma tese, dissertação ou trabalho de pesquisa). O resumo relata de forma concisa os objetivos e resultados da sua pesquisa, para que os leitores saibam exatamente o que se aborda no seu documento.\\Embora a estrutura possa variar um pouco dependendo da sua área de estudo, o seu resumo deve descrever o propósito do seu trabalho, os métodos que você usou e as conclusões a que chegou.\\Uma maneira comum de estruturar um resumo é usar a estrutura IMRaD. Isso significa: \begin{itemize} \item Introdução \item Métodos \item Resultados \item Discussão \end{itemize} Veja mais pormenores aqui:\\\texttt{https://www.scribbr.com/dissertation/abstract/}}
+\Abstract{Palavras Chave}{Arqueologia, Deep learning, LiDAR, Unet, YOLOv7}
+         {Resumo}{\selectlanguage{portuguese}Esta dissertação foi desenvolvida no ambito do projetio ODYSEY. O projeto tem como objetivo desenvolver uma plataforma destinada a arqueólogos que contenha informação geografica.
+Dentro do âmbito do projeto, esta dissertacao foca-se no uso de algortimos de deep learning, com o objetivo de identificar sitios arqueologicos, atrves de imagens provenientes de dados recolhidos com LiDAR. A zona escolhida para o projeto foi o Alto Minho e os objetos de estudo foram mamoas e castros. Para alcancar esse objetivo foi preciso processar essas imagens, de modo a criar o dataset, assim como criar metodos de data augmentation, depois disso foram usados dois algoritmos de deep learning, um de object detection e um de semantic segmentation, YOLOv7 e Unet respetivamente. No fim foi feito inferencias nas imagens providas de modo a tentar encontrar novos sitios arqueologicos ainda nao anotados.}
 
 %%% OPTIONAL: you can write the keywords and
 %%%  abstract in other languages. You can repeat
@@ -189,8 +197,9 @@ the problem in a way that will allow a solution}{Bertrand Russell}
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation.
 %%% You can modify the language to any other supported by Latex
 %% Optional Keywords and Abstract in additional languages.
-\Abstract{Keywords}{textbook, architecture, history, construction, construction materials, traditional knowledge.}
-         {Abstract}{\selectlanguage{english}An abstract is a short summary of a longer work (such as a thesis, dissertation or research paper).\\The abstract concisely reports the aims and outcomes of your research, so that readers know exactly what your paper is about.\\Although the structure may vary slightly depending on your discipline, your abstract should describe the purpose of your work, the methods you’ve used, and the conclusions you’ve drawn.\\One common way to structure your abstract is to use the IMRaD structure. This stands for: \begin{itemize} \item Introduction \item Methods \item Results \item Discussion \end{itemize} Check for more details here:\\\texttt{https://www.scribbr.com/dissertation/abstract/}}
+\Abstract{Keywords}{Archaeology, Deep learning, LiDAR, Unet, YOLOv7.}
+         {Abstract}{\selectlanguage{english}This dissertation was developed within the ODYSEY project. The project aims to develop a platform for archeologists that contains geographic information.
+Within the ambit of the project, this dissertation focuses on the use of deep learning algorithms, with the objective of identifying archaeological sites, through images coming from data collected with LiDAR. The area chosen for the project was Alto Minho and the objects of study were tumuli and hillforts. To achieve this goal it was necessary to process these images, in order to create the dataset, as well as to create data augmentation methods, after that two deep learning algorithms were used, one for object detection and one for semantic segmentation, YOLOv7 and Unet respectively. At the end, we made inferences on the provided images in order to try to find new archaeological sites not yet annotated.}
 
 %%% Edit the Jury President information.
 %% First Member will be the President of the Jury
