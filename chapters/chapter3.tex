@@ -77,17 +77,17 @@ For this, a Python script was used. In this script, one LRM image was loaded at 
      \label{Map function}
 \end{equation}
 
-In the function, the inMin and inMax represent the geographic coordinates of the LRM image extremities, whereas the outMin and outMax represent the size of the image in pixels. However, in the y-coordinate, are counted from top to bottom. Therefore, to calculate the y-coordinate of the pixel, outMin and outMax are swapped.
+In the function, inMin and inMax represent the geographic coordinates of the LRM image extremities, while outMin and outMax represent the size of the image in pixels. However, the y coordinate counts from top to bottom. Therefore, to calculate the y-coordinate of the pixel, outMin and outMax are swapped.
 
-Once this is done, the bounding boxes are stored in a list. The script then iterates over the annotations to create the crops. For each unprocessed annotation, a range of coordinates is generated around the annotation, which will define the region of interest. These coordinates are randomly selected within a specific range around the annotation. The script then checks whether the selected region of interest contains only fully visible objects. If true, the annotations present in the crop are registered as already processed. This is important to maintain the uniqueness of the original dataset annotations. 
+Once this is done, the bounding boxes are stored in a list. The script then iterates over the annotations to create the crops. For each unprocessed annotation, a range of coordinates around the annotation is generated, defining the region of interest. These coordinates are randomly selected within a certain range around the annotation. The script then checks if the selected region of interest contains only fully visible objects. If this is true, the annotations present in the region of interest are registered as already processed. This is important to preserve the uniqueness of the original dataset annotations. 
 
-The crop is then saved along with the label in YOLO format and a second label containing not the information from the bounding box, but the segmentation. This will be used later for both the Unet and the dataset augmentation.
+The crop is then saved along with the label in YOLO format and a second label containing not the bounding box information, but the segmentation. This will be used later for both the unet and the dataset augmentation.
 
-The script also split the dataset into training and validation, and chose 85\% for training and 15\% for validation.
+The script also splits the dataset into training and validation, choosing 85\% for training and 15\% for validation.
 
-Finally, the bounding boxes are utilized to store the raw LiDAR data points that correspond to each annotation. These points are saved in separate .las files, with each file containing the points whose coordinates fall within the corresponding bounding box. This approach ensures that the LiDAR data is organized and associated with the specific objects annotated by the bounding boxes.
+Finally, the bounding boxes are used to store the raw LiDAR data points corresponding to each annotation. These points are stored in separate .las files, with each file containing the points whose coordinates fall within the corresponding bounding box. This approach ensures that the LiDAR data is organized and associated with the specific objects annotated by the bounding boxes.
 
-The use of these files will be explained later.
+The use of these files is explained later.
 
 The next two tables show the results of the dataset creation.
 
@@ -123,10 +123,11 @@ The next two tables show the results of the dataset creation.
 
 
 \section{Dataset augmentation}
-Deep Learning has revolutionized the field of artificial intelligence, enabling significant advances in areas such as image recognition, natural language processing, and many other complex domains. However, for Deep Learning models to reach their full potential, it is essential to overcome challenges such as sparse training data and limited generalization.
+Deep learning has revolutionized the field of artificial intelligence, enabling significant advances in areas such as image recognition, natural language processing, and many other complex domains. However, for deep learning models to reach their full potential, it is essential to overcome challenges such as sparse training data and limited generalization.
 
-The main reason augmentation is so important is the ability to improve the generalizability of Deep Learning models. With more examples available for training, the model is exposed to a wider variety of cases and patterns, allowing it to learn more robust and variation-resistant features, avoiding overfiting.
-Overffiting occurs when a model performs very well on training data, yet when presented with new data has difficulty making correct predictions. This can occur for several reasons\cite{overfitting}:
+The main reason why augmentation is so important is its ability to improve the generalizability of deep learning models. With more examples available for training, the model is exposed to a wider variety of cases and patterns, allowing it to learn more robust and variation-resistant features and avoid overfitting.
+Overfitting occurs when a model performs very well on training data, but struggles to make accurate predictions when presented with new data. This can happen for several reason\cite{overfitting}:
+
 \begin{itemize}
 \item There is too little training data, creating a dataset that is unrepresentative of all possible inputs.
 
@@ -139,23 +140,24 @@ Overffiting occurs when a model performs very well on training data, yet when pr
 
 This is clearly an undesirable phenomenon.
 
-Analyzing the github repository which contains the code needed to run YOLOv7, is possible to verify that no recommendations for creating a custom dataset are indicated, not even in the published paper \cite{paperyolov7}, in which it is only indicated that the COCO dataset was used to train the model and nothing else is mentioned about datasets. 
+Analyzing the github repository that contains the code needed to run YOLOv7, it is possible to verify that there are no recommendations for creating a custom dataset, not even in the published paper \cite{paperyolov7}, which only states that the COCO dataset was used to train the model and nothing else is mentioned about datasets. 
 
-However in the YOLOv5 repository, there is a section, where it is given recommendations on how to train a custom dataset, and as said before, it is recommended per object type to have more than 1500 images and more than 10000 annotations \cite{yolov5recomedacoes}, and as it is possible to see, the original dataset is far from containing this amount of data and it was to overcome this problem that two augmentation algorithms were used.
-I will refer to the first algorithm as copy paste augmentation and to the second as simple augmentation.
+However, in the YOLOv5 repository, there is a section where it is given recommendations on how to train a custom dataset, and as said before, it is recommended to have more than 1500 images and more than 10000 annotations per object type \cite{yolov5recomedacoes}, and as it is possible to see, the original dataset is far from containing this amount of data and it was to overcome this problem that two augmentation algorithms were used.
+I will refer to the first algorithm as copy-paste augmentation and the second as simple augmentation.
 
 \subsection{Copy paste augmentation}
-The augmentation copy paste method used, consists of copying annotated objects and pasting them in areas where it is very certain that there are no unannotated objects.
+The copy-paste augmentation method used consists of copying annotated objects and pasting them into areas where it is very certain that there are no unannotated objects.
 
-In the creation of the base dataset, only a small portion of the LRM images were used, leaving a large amount of potential crops with unannotated backgrounds. From here it would be easy to use the segmentation already provided for the archaeological sites, crop and paste in these backgrounds. However, there is one problem, the provided annotations do not result in intensive terrain analysis, leaving the possibility of unannotated sites, which means one cannot If the algorithm crops an image, where there is an unannotated site, this would lead to deterioration of the deep learning algorithm.
+When creating the base dataset, only a small portion of the LRM images were used, leaving a large number of potential crops with unannotated backgrounds. From here, it would be easy to use the segmentation already provided for the archaeological sites, crop and paste these backgrounds. However, there is a problem, the provided annotations do not result in intensive terrain analysis, leaving the possibility of unannotated sites, which means that if the algorithm crops an image where there is an unannotated site, this would lead to a degradation of the deep learning algorithm.
 
-It becomes necessary for the copy paste algorithm to be able to discard backgrounds with possible unannotated sites, which is in itself a paradox, since the objective of the project is to detect unannotated sites. To do this we used the yolov5 model trained on the base dataset. This model then becomes responsible for analyzing candidate crops, discarding all those that have possible new sites. 
+It becomes necessary for the copy-paste algorithm to be able to discard backgrounds with possible unannotated sites, which in itself is a paradox since the goal of the project is to detect unannotated sites. To do this, we used the yolov5 model trained on the base dataset. This model is then responsible for analyzing candidate crops, discarding all those that have possible new sites. 
 
-Since the model was trained on limited data, it is extremely sensitive, so it ends up detecting many shapes that are actually false positives. It is because of this sensitivity that the model is useful in discarding possible crops, and since the background is quite large, even if the model discards many images, the background is not compromised.
+Since the model was trained on limited data, it is extremely sensitive, so it ends up detecting many shapes that are actually false positives. Because of this sensitivity, the model is useful in discarding possible crops, and because the background is quite large, even if the model discards many images, the background is not compromised.
 
-A second problem that arises from the copy paste algorithm, is the choice of the paste location. When choosing randomly, it is possible that the archaeological site will be over a river, house, road and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Local Based Rank) technique was used. This technique consists in classifying the soil areas as subsoil or land-used. For this, the Land-use and Occupation charter of Portugal\cite{charterPortugal} was used. This charter is basically a comprehensive document that provides detailed information about the various types of land use and occupation in Portugal. It serves as a reliable reference for categorizing soil areas into subsoil or land-used regions.
+A second problem that arises from the copy-paste algorithm is the choice of the paste location. If it is chosen randomly, it is possible that the archaeological site will be over a river, a house, a road, and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Local Based Rank) technique was used. This technique consists in classifying the land areas as subsoil or land use. For this purpose, the Charter of Land Use and Occupation of Portugal\cite{charterPortugal} was used. This charter is basically a comprehensive document that provides detailed information about the different types of land use and occupation in Portugal. It serves as a reliable reference for categorizing land areas into subsoil or land use regions.
 
-The LBR technique utilizes this charter to determine the classification of soil areas. By referencing the specific guidelines and classifications outlined in the charter, the technique can accurately label each area as either subsoil or land-used, thereby providing valuable context for the augmentation process.
+The LBR technique uses this charter to determine the classification of land areas. By referring to the specific guidelines and classifications outlined in the Charter, the technique can accurately label each area as either subsoil or land-used, thereby providing valuable context for the augmentation process.
+
 
 \begin{figure}[H]
 \centering
@@ -227,7 +229,7 @@ The two following tables contain the results from copy paste augmentation.
 
 
 \subsection{Simple augmentation}
-The second augmentation algorithm, referred to as simple augmentation, is a much more straightforward approach compared to the first one. It involves centering each object within a 640x640 pixel box and randomly shifting the box. Subsequently, the algorithm verifies if the object, along with other nearby objects, remains completely inside the box. If all the objects are contained within the box, a similar transformation to the previous algorithm is applied, not to the individual object but to the entire image. Finally, the modified images and their corresponding labels are saved.
+The second augmentation algorithm,  which it will be referred to as simple augmentation, is a much more straightforward approach compared to the first one. It involves centering each object within a 640x640 pixel box and randomly shifting the box. Subsequently, the algorithm verifies if the object, along with other nearby objects, remains completely inside the box. If all the objects are contained within the box, a similar transformation to the previous algorithm is applied, not to the individual object but to the entire image. Finally, the modified images and their corresponding labels are saved.
 
 This method was applied several times for the same annotation enabling the generation of annotated data that retains the same objects but positions them differently within the image, resulting in varied backgrounds.
 

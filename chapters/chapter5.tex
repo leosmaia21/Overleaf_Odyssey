@@ -4,16 +4,16 @@
 \label{chapter:unet}
 
 \begin{introduction}
-sim sim  sim
+This chapter discusses the use of semantic segmentation models. 
 \end{introduction}
 
-Identifying objects in images can be achieved through various methods, not limited to objection detection alone. While object detection involves placing a bounding box to detect the object, there exist alternative approaches like instance segmentation and semantic segmentation. These methods aim to classify the image at the pixel level by assigning a class to each individual pixel within the image.
+Identifying objects in images can be achieved by various methods, not limited to object detection alone. While object detection involves placing a bounding box to detect the object, there are alternative approaches such as instance segmentation and semantic segmentation. These methods aim to classify the image at the pixel level by assigning a class to each individual pixel within the image.
 
-The goal of instance segmentation is to classify and distinguish individual objects in an image. In this method, besides each pixel gets a classification of which class it belongs to. In addition, each object is assigned to a specific class, allowing to differentiate between different types of objects present in the image. In this way, instance segmentation provides detailed information about the location and class of each object.
+The goal of instance segmentation is to classify and distinguish individual objects in an image. In this method, each pixel is given a classification of which class it belongs to. In addition, each object is assigned to an individual class, which makes it possible to distinguish between objects of the same class. In this way, instance segmentation provides detailed information about the location and class of each object.
 
-Semantic segmentation, on the other hand, focuses only on classifying the class of the pixel, without distinguishing between different objects of the same class. In this method, the image is divided into semantically meaningful regions, where each pixel within a region is assigned to the same class.
+Semantic segmentation, on the other hand, focuses only on classifying the class of the pixel, without distinguishing between different objects of the same class. In this method, the image is divided into semantically meaningful regions, and each pixel within a region is assigned to the same class.
 
-The next image exemplifies the difference between semantic segmentation and instance segmentation.
+The next image illustrates the difference between semantic segmentation and instance segmentation.
 
 \begin{figure}[H]
 \centering
@@ -62,13 +62,13 @@ The next two images show a photo of the dataset copy paste of hillforts and its 
     \caption{Example of label for Unet training}%
 \end{figure}
 
-The training script was also adapted, to save the best generated model of all seasons. Also an early stop was added, so that if there is no improvement in 40 seasons the training will stop.
+The training script has also been adapted to save the best generated model of all seasons. Also, an early stop was added so that if there is no improvement in 40 seasons, the training will stop.
 
-To evaluate the training it was used the metric validation dice.
+The metric validation dice was used to evaluate the training.
 
-The Dice index (also known as the Dice coefficient) is a widely used metric for evaluating the overlap or similarity between two image segmentation masks. It is often used in segmentation problems, such as segmentation of objects in medical images. Is calculated based on the comparison between the segmentation mask predicted by the model and the reference mask (ground truth). The calculation of the Dice index involves counting the corresponding pixels in the two masks and comparing the intersection and the sum of the areas of the masks.
+The Dice index (also known as the Dice coefficient) is a widely used metric for evaluating the overlap or similarity between two image segmentation masks. It is often used in segmentation problems, such as the segmentation of objects in medical images. It is calculated based on the comparison between the segmentation mask predicted by the model and the reference mask (ground truth). The calculation of the Dice index involves counting the corresponding pixels in the two masks and comparing the intersection and the sum of the areas of the masks.
 
-The Dice index is given by the following formula:
+The dice index is given by the following formula:
 
 \begin{equation}
     Dice = \frac{2 \times \text{Area of Overlap}}{\text{Total Area of Mask 1} + \text{Total Area of Mask 2}}
@@ -102,11 +102,11 @@ The next images show the evolution of the dice index during the training process
 \caption{Evolution of dice index for hillforts simple dataset}
 \end{figure}
 
-As you can see, all the training sessions stabilized around 80\%.
+As you can see, all training sessions stabilized with a validation dice around 80\%.
 
-A value that was fundamental to train the models was the learning rate. The default learning rate was 0.001, however it was verified that with this value after almost 50 seasons the model still hadn't started to converge, even being programmed a reduction of the learning rate in 10\% if there was no improvement after 5 seasons. Several values were tried, having finally chosen 1e-7.
+One value that was fundamental to the training of the models was the learning rate. The default learning rate was 0.001, but it was verified that with this value the model still hadn't started to converge after almost 50 epochs, even a reduction of the learning rate in 10\% was programmed if there was no improvement after 5 seasons. Several values were tried, finally 1e-7 was chosen.
 
-For unet it was not possible to train with the non augmented dataset, because most probably the dataset is small, the model after 100 epochs had not yet started to converge for both the tumuli and the hillforts.
+For unet it was not possible to train with the unaugmented dataset, because most likely the dataset is small, the model had not started to converge after 100 epochs for both the tumuli and the hillforts.
 
 
 \subsection{Inference}
@@ -151,17 +151,36 @@ The next tables shows the results from inference, also here was used the same sc
 \caption{Results of inference for hillforts(Unet)}
 \end{table}
 
-Like in Yolo, the total is the total number of inferences of the model, the validations are the total number of validated results of the LOF model, the true positives, false positives and false negatives are relative to the total number of inferences and not to the results validated by the LOF.
+As in YOLO, the total is the total number of detections of the model, the validations are the total number of validated results of the LOF model, the true positives, false positives and false negatives are relative to the total number of detections and not to the results validated by the LOF.
 
-As it is possible to see the results are quite different from the yolo, the first difference is in the number of inferences, unet has detected much fewer archaeological sites than yolo, however it left many of the sites already noted undetected.
+As can be seen, the results are quite different from YOLO, the first difference is in the number of detections, Unet has detected many fewer archaeological sites than YOLO, but it has left many of the sites already noted undetected.
+
+\begin{figure}[H]
+    \centering
+    \subfloat{{\includegraphics[width=7cm]{images/examples_inference/unet/mamoas/1.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{images/examples_inference/unet/mamoas/2.png} }}%
+    \caption{Examples of inference results from the copy-paste model for tumulis, the green corresponds to a ground truth, while the red corresponds to a detection from Unet.}%
+    \label{fig:unet4mamoas}
+\end{figure}
+
+In the figures \ref{fig:unet4mamoas} and  \ref{fig:yolo4mamoas} it is possible to see the contrast between false negatives, in Yolo and Unet, while Yolo detected four ground truth tumuli on the left, Unet detected only one.
+
+\begin{figure}[H]
+    \centering
+    \subfloat{{\includegraphics[width=7cm]{images/examples_inference/unet/castros/1.png} }}%
+    \qquad
+    \subfloat{{\includegraphics[width=7cm]{images/examples_inference/unet/castros/2.png} }}%
+    \caption{Examples of inference results from the copy-paste model for hillforts, the green corresponds to a ground truth, while the red corresponds to a detection from Unet.}%
+\end{figure}
 
 
 \section{Yolov7-seg}
 YOLOv7-seg is a modification of YOLOv7, it is an integration of BlendMask with YOLOv7, each bouding box generated by YOLOv7 is then fed into BlendMask neural network in order to generate the segmentation.
 
-\subsection{Training}
+\subsection{Model training}
 
-YOLOv7-seg was trained exclusively using the simple dataset. The decision to use this dataset was driven by the superior performance of YOLOv7. Since the project's primary focus lies in the localization of archaeological sites rather than segmentation, the results are anticipated to be quite similar to those of YOLOv7. However, the ability to obtain segmentation could be advantageous for archaeological purposes.
+YOLOv7-seg was trained exclusively using the simple dataset. The decision to use this dataset was driven by the superior performance in YOLOv7. Since the primary focus of the project is archaeological site localization rather than segmentation, the results are expected to be quite similar to those of YOLOv7. However, the ability to obtain segmentation could be advantageous for archaeological purposes.
 
 
 \begin{figure}[H]
@@ -171,6 +190,8 @@ YOLOv7-seg was trained exclusively using the simple dataset. The decision to use
     \subfloat{{\includegraphics[width=5cm]{images/yoloseg/training/yolosegcastros.png} }}%
     \caption{Results of YOLO-seg for tumulis(left) and hillforts(right)}%
 \end{figure}
+
+As can be seen, the training is identical to YOLOv7 training (figure \ref{fig:tumuliyolomaia} and figure \ref{fig:hillyolomaia}), for the same dataset, as expected
 
 \subsection{Inference}
 In the inference, a script similar to unet's was used, but instead of the model's result format being in table format, the result comes in polynomial format.
@@ -192,3 +213,5 @@ The next table shows the results from the YOLOv7-seg inference.
 \end{tabular}
 \caption{Results of inference(YOLO-seg)}
 \end{table}
+
+As expected, the results are not much different from YOLOv7.

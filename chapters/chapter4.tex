@@ -12,8 +12,8 @@ One of the first algorithms to be made for this purpose, is the RCNN, this algor
 
 Later, two other algorithms were created, the Fast RCNN and the Faster RCNN, showing improvements, the latter being able to process an image in mere seconds.
 
-Later in 2016, a paper was published of a model, with an architecture called You Only Look Once (YOLO), which has since had several versions, the latest being YOLOv8.
-YOLO is considered state of the art when it comes to object detection.
+Later in 2016, a paper was published on a model with an architecture called You Only Look Once (YOLO), which has since had several versions, the latest being YOLOv8.
+YOLO is considered state of the art for object detection.
 
 
 
@@ -35,10 +35,10 @@ y = [pc, cx, cy, w, h, c0, c1, c2,...].
 However, this approach presents a problem, because for the same object several bounding boxes can appear, for this the algorithm uses a function called NMS (Non Maximum Suppression).
 
 \subsubsection{Non Maximum Suppression}
-Non Maximum Suppression \cite{nonmaxsurpression} is a method that selects a region from a series of overlapping regions. First it discards all proposed regions with a probability below a certain threshold. For the remaining ones it chooses the region with the highest probability and discards all the others that have an IoU higher than a certain threshold.
-IoU is the intersection over union, that is the area of the region in question divided by the union of the areas of all the regions that overlap with that same region.
+Non Maximum Suppression \cite{nonmaxsurpression} is a method for selecting a region from a set of overlapping regions. First, it discards all proposed regions with a probability below a certain threshold. For the remaining regions, it selects the region with the highest probability and discards all others that have an IoU higher than a certain threshold.
 
-IoU is the intersection over union, this means the area of intersection of the overlapping regions to be divided by the area of the union.
+IoU is the intersection over union, that is, the area of the intersection of the overlapping regions to be divided by the area of the union. It will be better explained later in the dissertation.
+
 
 
 \subsection{Training}
@@ -58,11 +58,11 @@ At the end of training, inference is performed on the test set, which consists o
 \subsubsection{Pre-trained models}
 One of the techniques widely used in deep learning is the use of pre-trained models, especially when the available dataset is relatively small. 
 
-The main advantage of pre-trained models is that they capture knowledge and patterns learned from massive datasets, which can be applied to specific tasks with smaller datasets. They are able to extract relevant features and abstract representations from the input data, which makes them more effective in the task at hand.
+The main advantage of pre-trained models is that they capture knowledge and patterns learned from massive datasets, which can be applied to specific tasks with smaller datasets. They are able to extract relevant features and abstract representations from the input data, making them more effective at the task at hand.
 
-Although unpre-trained models have almost the same accuracy as unpre-trained models, the robustness and uncertainty of the model change dramatically, as can be seen in the article \cite{pretrainedmodels}.
+Although pre-trained models have almost the same accuracy as untrained models, the robustness and uncertainty of the model changes dramatically, as can be seen in the article \cite{pretrainedmodels}.
 
-This means that for new input data, never before seen by the model, the model can make better predictions as well as be more certain of the results, giving a higher probability of the results.
+This means that for new input data that the model has never seen before, the model can make better predictions and be more certain of the results, giving a higher probability of the results.
 
 
 
@@ -89,20 +89,37 @@ By analyzing the table it is possible to see that the best model in terms of mea
 
 The generated datasets were divided into training and validation data, 85\% training and 15\% validation. The test dataset was not used, because, at the end of training, an inference was performed on the original LRM images.
 
-The models were trained between 200 and 350 epochs, with an anticipated stop if there is no improvement at 40 epochs and a batch size of 8 was used, the highest allowed for the hardware used which was an Nvidia GeForce RTX 3080 GPU and an AMD Ryzen 5 5600X 6-Core 3.7GHz CPU.
+The models were trained between 200 and 350 epochs, with an expected stop if there was no improvement after 40 epochs, using a batch size of 8, the highest allowed for the hardware used, which was an Nvidia GeForce RTX 3080 GPU and an AMD Ryzen 5 5600X 6-Core 3.7GHz CPU.
 
 \subsubsection{Cross fold validation}
-A technique that is also widely used is cross fold validation, which is known to offer good results, especially when the dataset is small. This technique consists in splitting the total dataset into K folds, and then using each fold as validation data and the others as training, generating K models.
+Another widely used technique is cross-fold validation, which is known to give good results, especially when the dataset is small. This technique consists of dividing the entire dataset into K folds, and then using each fold as validation data and the others as training data to generate K models.
 
-This method is useful, because the whole available dataset is used to train K - 1 models, which makes it possible to analyze whether there are significant differences in the use of different parts of the dataset.
+This method is useful because the entire available dataset is used to train K-1 models, which makes it possible to analyze whether there are significant differences in the use of different parts of the dataset.
 
-This technique has only been used on the dataset generated with copy paste augmentation on tummies. The dataset was divided into 5 folds, each fold containing 550 images.
+This technique was only applied to the dataset generated by copy-paste augmentation on stomachs. The dataset was divided into 5 folds, with each fold containing 550 images.
+
+\subsection{LOF model training}
+One of the problems encountered earlier in the dissertation was that the inference results contained many false positives; in an attempt to solve this problem, a \ac{lof} model was trained on the raw \ac{lidar} data.
+
+Using the .las files generated during the creation of the dataset, which contain only the points within the bounding box surrounding the object in question, two \ac{lof} models, one for tumulis and one for hillforts, were trained using the scikit learn library\cite{lof}.
+
+\ac{lof} calculates the local outlier factor for each sample in the dataset, taking into account the local density of neighboring samples. It compares the density of the sample with the average density of its nearest neighbors. If the density of the sample is significantly lower than the average density of its neighbors, this indicates that the sample is a possible outlier.
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=8cm]{images/lof_example.png}
+\caption{Example of clusters generated by LOF}
+\end{figure}
+
+To train the model, the jakteristics library was used, this library allows 14 features to be taken from each point in the point cloud, these features are: Eigenvalue Sum, Omnivariance, Eigenentropy, Anisotropy, Planarity, Linearity, PCA1, PCA2, Surface Variation, Sphericity, Verticality and Normal Vector (nx, ny, nz).
+
+Since each point contributed 14 features, this results in a huge amount of features, the mean, median, variance, standard deviation and covariance are calculated, resulting in an amount of 70 features per .las file.
 
 
 
 \subsection{Metrics}
 
-YOLOv7 already provides the python script needed for training and also saves the training results. These training results are fundamental to understand if the model was well trained or not. Several metrics are used for this, some of them being the confusion matrix, accuracy, mAP and F1.
+YOLOv7 already provides the python script needed for training and also saves the training results. These training results are fundamental to understand if the model is well trained or not. Several metrics are used for this, some of them being the confusion matrix, accuracy, mAP and F1.
 
 The confusion matrix is nothing more than a table with the values of true positives, false positives, true negatives and false negatives (TN). True positives (TP) are all predictions generated by the model where an object actually exists, false positives (FP) are predictions where the object in question does not exist, true negatives (TN) are predictions where the model is all the background given by the model, which actually corresponds to background and finally, false negatives are all objects that were not detected by the model.
 
@@ -137,7 +154,7 @@ For a detected object to be considered a true positive, it is necessary that the
 \caption{Example of IoU \cite{IOUpaper}}
 \end{figure}
 
-Having the APs of all classes, the mAP is then calculated by taking the average of the APs, however in this project separate models were trained for each class, making the AP equal to the mAP.
+Having the APs of all classes, the \ac{map} is then calculated by taking the average of the APs, however in this project separate models were trained for each class, making the AP equal to the mAP.
 
 Another metric is F1, which is given by the following formula:
 
@@ -154,7 +171,7 @@ When it comes to lof, training data is unavailable. Additionally, unlike yolo, t
 \subsection{Training results}
 In this subsection the training results of yolov7 will be shown. Training was performed with all the generated datasets, which are 4 for the tummies and 3 for the hillforts.
 
-As said before the dataset was divided in 85\% for training and 15\% for validation, no test set was used, since the original dataset provided was small, and also because an inference will be made on the LRM images, so it will be possible to analyze the model's performance, analyzing if it found all the annotated objects as well as new ones.
+As said before, the dataset was divided into 85\% for training and 15\% for validation, no test set was used because the original dataset provided was small, and also because an inference will be made on the LRM images, so it will be possible to analyze the model's performance, analyzing if it found all the annotated objects as well as new ones.
 
 First the training results for the tumuli will be analyzed, and then the results for the hillforts will be analyzed.
 
@@ -188,12 +205,37 @@ In the case of training with the dataset augmented with the simple algorithm the
     \qquad
     {{\includegraphics[width=5cm]{images/training/mamoas/maia2.png} }}
     \caption{Results of Yolov7 training with tumulis augmented dataset (simple)}
-    \label{fig:example}
+    \label{fig:tumuliyolomaia}
 \end{figure}
 
-In order to analyze these results, my focus will be solely on the mAP0.5 metric rather than the F1 score. The reason behind this choice is that mAP provides a consolidated value that combines both precision and recall for each epoch, while F1 score represents a graph for each epoch, making it a more complex metric to work with.
+To analyze these results, I will focus solely on the mAP0.5 metric rather than the F1 score. The reason for this choice is that mAP provides a consolidated value that combines both precision and recall for each epoch, while F1 score represents a graph for each epoch, making it a more complex metric to work with.
 
-As can be observed, in neither of the three models did overfitting occur, including training with the dataset not augmented, which is the most prone to overfitting. It is interesting to note that in the copy paste dataset, after a few seasons, the model stabilized and got very close to 1.
+As can be observed, there was no overfitting in any of the three models, even when trained on the unaugmented dataset, which is the most prone to overfitting. It is interesting to note that in the copy-paste dataset, the model stabilized after a few seasons and became very close to 1.
+
+The training results of the 5 folds corresponding to the cross validation are shown in the next figures.
+\begin{figure}[H]
+    \centering
+    {{\includegraphics[width=7cm]{images/training/cross/00.png} }}
+    \qquad
+  {{\includegraphics[width=7cm]{images/training/cross/01.png} }}
+    \caption{Fold 0 and Fold 1 training results for cross validation}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {{\includegraphics[width=7cm]{images/training/cross/02.png} }}
+    \qquad
+  {{\includegraphics[width=7cm]{images/training/cross/03.png} }}
+    \caption{Fold 2 and Fold 3 training results for cross validation}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=7cm]{images/training/cross/04.png}
+\caption{Fold 5 training results for cross validation}
+\end{figure}
+
+As can be seen from the folds training, at least with 5 folds, there is no subset in which there is a big difference in performance, meaning that the data set is homegenous and does not contain a subset with data that is very different from the rest.
 
 %Falta agora para o cross validation!!!!!!
 %Isso sera uma tarefa nao para o Leonardo de hoje mas sim para o Leonardo do futuro!
@@ -228,59 +270,46 @@ In the case of training with the dataset augmented with the simple algorithm the
     \qquad
     {{\includegraphics[width=5cm]{images/training/castros/maia2.png} }}
     \caption{Results of Yolov7 training with hillforts augmented dataset (simple)}
-    \label{fig:example}
+    \label{fig:hillyolomaia}
 \end{figure}
 
-Similarly to the tummy tucks, in none of the three workouts, overfitting occurred. In the case of the training with the unenhanced dataset, it was necessary to increase the number of seasons in order to make the model converge. And similarly to the tumuli training, the hillforts training with the copy paste dataset, after a few seasons, the mAP was already close to 1.
+Similar to the tumulis, there was no overfitting.. In the case of the training with the non augmented dataset, it was necessary to increase the number of seasons in order to make the model converge. And similarly to the tumuli training, the hillforts training with the copy paste dataset, after a few seasons, the mAP was already close to 1.
+
+
 
 \subsection{Inference}
 In this subsection we will show how the inference was done on the 4 LRM images.
 
-In order to do the inference, a python script was created, in this script, the image is loaded with the PIL library and then, the geographic coordinates of the 4 corners of the image are obtained using the rasterio library, this is possible because tif images can contain additional information such as geographic coordinates. 
+In order to do the inference, a python script was created, in this script the image is loaded using the PIL library and then the geographic coordinates of the 4 corners of the image are obtained using the rasterio library, this is possible because tif images can contain additional information such as geographic coordinates. 
 
-Having the coordinates, and the images being too large to make inferences, an interactive window was used, in order to perform 640x640 pixel crops. However this approach leads to a problem, the crop can be done on top of an object, leaving a part of the object in one image and another part in the next image, to work around this a sliding window was used instead of a fixed window, with the sliding window instead of cropping in a fixed way at each position, the image is scrolled in a systematic way by moving the window pixel by pixel or at a defined interval. This approach allows each object or region of the image to be covered by multiple inference windows, thus avoiding the problem of having parts of an object split between different crops.
+Since the coordinates and the images are too large to make inferences, an interactive window was used to perform 640x640 pixel cropping. However, this approach leads to a problem, the cropping can be done on top of an object, leaving part of the object in one image and another part in the next image, to work around this a sliding window was used instead of a fixed window, with the sliding window instead of cropping in a fixed way at each position, the image is scrolled in a systematic way by moving the window pixel by pixel or at a defined interval. This approach allows each object or region of the image to be covered by multiple inference windows, thus avoiding the problem of having parts of an object split between different crops.
 
-When using the sliding window, the image is divided into overlapping windows that move along the image. Each sliding window captures a specific region of the image and then inference is applied to that region individually. As the window slides, new regions are processed, ensuring that all objects or regions are covered.
+Sliding windows divide the image into overlapping windows that move along the image. Each sliding window captures a specific region of the image, and then inference is applied to that region individually. As the window slides, new regions are processed, ensuring that all objects or regions are covered.
 
 For the tumuli a 50\% slide was used, because they are small objects, and for the hillforts a 30\% slide was used, because some hillforts occupy almost half of the cropped image.
 
-Once the crop is obtained, it is checked with the aid of a topographic chart to see if the crop contains areas that are likely to have objects. This means that in the crop, there are areas where, for example, there are no houses or roads, thus discarding crops that represent, for example, a residential area in its entirety. After that, inference is performed with YOLO. As mentioned before, YOLO can make multiple detections for the same object, so to overcome this, the NMS function is also used here, discarding overlaps and all inferences with a confidence lower than 25\%. Then, once again, the topographic chart is used to verify if the object is not in an area where it would be impossible to detect.
+Once the crop is obtained, the topographic map is used to determine whether the crop contains areas that are likely to contain objects. This means that there are areas in the crop where, for example, there are no houses or streets, so crops that represent, for example, a residential area in its entirety are discarded. After that, the inference is done with \ac{yolo}. As mentioned before, \ac{yolo} can make multiple detections for the same object, so to overcome this, the NMS function is also used here, discarding overlaps and all inferences with a confidence lower than 25\%. Then the topographic map is used again to check that the object is not in an area where it would be impossible to detect.
 
-Once the inference is completed, the identified objects undergo validation using the LOF model. To validate each object, a temporary LAS file is generated. This file is created by utilizing the geographical coordinates of the bounding box. The temporary LAS file is then populated with points that fall within the bounding box. Next, various statistical measures such as mean, median, variance, standard deviation, and covariance are computed using the 14 features extracted from each point. Finally, a prediction is made, returning a value of 1 if the object is determined to be a true positive, or 0 if it is classified as a false negative.
+Once the inference is complete, the identified objects are validated using the LOF model. To validate each object, a temporary LAS file is created. This file is created using the geographic coordinates of the bounding box. The temporary LAS file is then populated with points that fall within the bounding box. Next, various statistical measures such as mean, median, variance, standard deviation, and covariance are calculated using the 14 features extracted from each point. Finally, a prediction is made, returning a value of 1 if the object is determined to be a true positive, or 0 if it is determined to be a false negative.
 
-Finally, due to the window slide, for the same object there may be several inferences, because when making the slide the same object may still appear in the next image. To mitigate this, initially the Euclidean distance was used, all the bounding boxes that had the center less than 15 pixels, which corresponds to 7.5 meters on the ground, from another one, would be removed. Initially this approach worked well for the tumuli. However, for the hillforts, a problem occurred, the yolo was detecting hillforts inside larger hillforts, something that does not happen in reality, making it difficult to choose a threshold value for the Euclidean distance. 
+Finally, due to the window slider, there may be multiple inferences for the same object, because when the slider is moved, the same object may still appear in the next image. To mitigate this, Euclidean distance was initially used to remove all bounding boxes whose center was less than 15 pixels, or 7.5 meters on the ground, from another bounding box. Initially, this approach worked well for the tumuli. However, for hillforts, a problem arose: the Yolo detected hillforts inside larger hillforts, which does not happen in reality, making it difficult to choose a threshold for the Euclidean distance. 
 
-In order to get around this, the Euclidean distance was replaced by IoU, as explained before, if the IoU was smaller than a certain value, the smaller hill was discarded, however, the problem still remains, as I checked later in article \cite{IOUpaper}, if the smaller hillfort is fully contained in the larger one and if the area of the smaller one is smaller than the defined threshold value, IoU does not discard, so the problem still remains. So the approach was adopted, instead of being the normal IoU the intersection. Therefore, instead of using the normal IoU, the intersection to be divided by the union, the division of the intersection to be divided by the area of the smallest detection was used. But before that the objects were ordered by area, from the biggest to the smallest, by doing that and using this modified version of the IoU, in the cases where there are detections completely contained inside another, or almost completely contained, they are removed, keeping the biggest one.
+In order to get around this, the Euclidean distance was replaced by IoU, as explained before, if the IoU was smaller than a certain value, the smaller hill was discarded, however, the problem still remains, as I checked later in article \cite{IOUpaper}, if the smaller hillfort is fully contained in the larger one and if the area of the smaller one is smaller than the defined threshold value, IoU does not discard, so the problem still remains. So the approach was adopted, instead of being the normal IoU the intersection. Therefore, instead of using the normal IoU, the intersection to be divided by the union, the division of the intersection to be divided by the area of the smallest detection was used. But before that the objects were ordered by area, from the biggest to the smallest, by doing that and using this modified version of the IoU, in the cases where there are detections completely contained inside another, or almost completely contained, they are removed, keeping the largest.
 
-In the end, the results are saved in a csv file, containing the geographic coordinates of the bounding box, the confidence given by yolo and the result of the LOF validation.
+In the end, the results are saved in a csv file, containing the geographic coordinates of the bounding box, the confidence given by \ac{yolo} and the result of the \ac{lof} validation.
 
-After the completion of the inference, it is necessary to assess the efficacy of the model by analyzing the detected ground truths and new objects. To facilitate this analysis, a Python script has been developed. Within this script, the ground truth coordinates are loaded and converted into corresponding image pixels, which are further transformed into bounding boxes. Similarly, the coordinates of the objects resulting from the inferences are processed. Utilizing the Shapely library, both the ground truth objects and the inferred objects are converted into polygons. Subsequently, a filtering process is applied to the inference results, removing any inferences with an area smaller than 90\% of the smallest ground truth area. Finally, an interaction is performed on the ground truth objects to determine which inference results intersect with the ground truth.
+Once the inference is complete, it is necessary to evaluate the effectiveness of the model by analyzing the discovered ground truths and new objects. To facilitate this analysis, a Python script was developed. Within this script, the ground truth coordinates are loaded and converted into corresponding image pixels, which are further converted into bounding boxes. Similarly, the coordinates of the objects resulting from the inference are processed. Using the Shapely library, both the ground truth objects and the inferred objects are converted to polygons. Next, a filtering process is applied to the inference results, removing all inferences with an area smaller than 90\% of the smallest ground truth area. Finally, an interaction is performed on the ground truth objects to determine which inference results intersect the ground truth.
 
-In the case of inference with the 5 models generated from cross validation, YOLOv7 provides a technique called model ensemble, in which it is allowed to use several models at the same time.
+In the case of inference with the 5 models generated by cross-validation, YOLOv7 provides a technique called model ensemble, which allows multiple models to be used simultaneously.
 
 \subsubsection{Model ensemble}
-Model ensemble is a technique that consists in using predictions from several deep learning models in order to obtain more robust results than a single model could provide.
+Model ensemble is a technique that uses predictions from multiple deep learning models to produce more robust results than a single model could provide.
 
-By using several models trained on different datasets, in this case the cross validation models, each model generates its own predictions. After that, the predictions are combined, for this, techniques such as majority voting, weighted average, probability average, among others, being possible to make a final decision.
+By using multiple models trained on different datasets, in this case the cross-validation models, each model generates its own predictions. The predictions are then combined using techniques such as majority voting, weighted averaging, probability averaging, and others to make a final decision.
 
-The idea behind this is that each model can capture different features or aspects of the training dataset, and by combining these various models, it is possible to compensate the failures of one model by the successes of others, thus making the result more reliable.
+The idea behind this is that each model can capture different features or aspects of the training data set, and by combining these different models it is possible to compensate for the failures of one model by the successes of others, making the result more reliable.
 
-\subsection{LOF model training}
-One of the problems encountered earlier in the dissertation was that the inference results contained many false positives, in an attempt to solve this problem, a Local Outlier Model (LOF) was trained on the raw LIDAR data.
 
-Using the .las files generated during creation of the dataset, containing only the points within the bounding box surrounding the object in question, two LOF modelsm, one for tumulis and one for hillforts, were trained using the scikit learn library\cite{lof}.
-
-LOF calculates the local outlier factor for each sample in the data set, taking into account the local density of neighboring samples. It compares the density of the sample against the average density of its nearest neighbors. If the density of the sample is significantly lower than the average density of its neighbors, this indicates that the sample is a possible outlier.
-
-\begin{figure}[H]
-\centering
-\includegraphics[height=8cm]{images/lof_example.png}
-\caption{Example of clusters generated by LOF}
-\end{figure}
-
-In order to train the model, jakteristics library was used, this library allows 14 features to be taken from each point in the point cloud, these features are: eigenvalue sum, omnivariance, eigenentropy, anisotropy, planarity, linearity, PCA1, PCA2, surface variation, sphericity, verticality, nx, ny and nz.
-
-As each point contributed 14 features, this results in a huge amount of features, the mean, median, variance, standard deviation and covariance are calculated, resulting in an amount of 70 features per .las file.
 
 \subsection{Inference results}
 In this sub-section it will be showed the results of the inferences made on the 4 LRM images. For this, a script was created, in which the annotations were loaded as well as the results, both the inference results and the annotations were converted to polynomials using the shapely library, then in an interactive way it was checked if any ground truth was intersected by any inference, if so it was accounted for, if there was more than one inference to intersect, only the first one was accounted for as a true positive and all the others as false positives.
@@ -318,10 +347,33 @@ Tables will be presented, in which will appear the total number of detected obje
 \end{tabular}
 \caption{Results of inference for hillforts(YOLOv7)}
 \end{table}
-It is important to emphasize that the false positives and true positives are relative to the available ground truth, i.e. the training and validation data, and as said before, these data are not the result of an intensive terrain analysis, and there may be among the false positives that are in fact true positives, i.e. new sites discovered by the algorithm that have not yet been annotated.
+It is important to emphasize that the false positives and true positives are relative to the available ground truth, i.e., the training and validation data, and as mentioned above, this data is not the result of intensive terrain analysis, and there may be some false positives that are actually true positives, i.e., new sites discovered by the algorithm that have not yet been annotated.
 
-However, according to the company that provided the data, most of the sites were noted, with only a few missing that may have been missed.
+However, according to the provider of the annotations, most of the sites have been annotated, with only a few that may have been missed.
 
-Analyzing the data resulting from the inferences, we can verify that there were many false positives, both in the tumuli and in the castros, however, in the tumuli, the worst case was the one resulting from cross validation, giving about 7 times more false positives than the model resulting from simple augmentation, on the other hand, it was the one that had fewer false negatives, that is, it was the one that managed to detect more ground truth.
+Analyzing the data resulting from the inferences, we can verify that there were many false positives, both in the tumuli and in the hillforts, but in the tumuli the worst case was the one resulting from cross validation, giving about 7 times more false positives than the model resulting from simple augmentation, on the other hand it was the one that had fewer false negatives, that is, it was the one that managed to detect more ground truth.
 
-In the case of the castros, the model that gave fewer positive false was the one resulting from the copy paste augmentation, giving 1750 negative false and detecting almost all the ground truths, failing only 10 in 163.
+In the case of the Hillforts, the model that gave fewer false positives was the one resulting from the copy-paste augmentation, giving 1750 false negatives and detecting almost all the ground truths, failing only 10 out of 163.
+
+
+The following pictures are examples of the results of some inferences.
+
+\begin{figure}[H]
+    \centering
+    {{\includegraphics[width=7cm]{images/examples_inference/yolov7/mamoas/correct.png} }}
+    \qquad
+  {{\includegraphics[width=7cm]{images/examples_inference/yolov7/mamoas/possibleFound.png} }}
+    \caption{Example of the result of inference from the copy-paste model, the green corresponds to a ground truth, while the blue corresponds to a detection from YOLOv7, on the left are 4 tumuli correctly found and on the right is a possible new tumuli.}
+    \label{fig:yolo4mamoas}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    {{\includegraphics[width=7cm]{images/examples_inference/yolov7/castros/1.png} }}
+    \qquad
+  {{\includegraphics[width=7cm]{images/examples_inference/yolov7/castros/2.png} }}
+    \caption{Example of hillforts, the green corresponds to a ground truth, while the blue corresponds to a detection from YOLOv7, on the right it is possible to see a clear false positive case.}
+    \label{fig:example}
+\end{figure}
+
+In the case of Hillforts, the results were not expected to be really good, because Hillforts can have different shapes and sizes, it can be hard for Yolo to learn what is background and what is not in the bounding box.
