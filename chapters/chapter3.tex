@@ -24,10 +24,10 @@ Deep learning is a subtype of artificial intelligence, which relies on neural ne
 %\item The model is too complex, causing it to learn not only the necessary predictive features, but also the noise that the inputs may have.
 %\end{itemize}
 
-To perform the Odyssey project, the Alto Minho region, in Portugal, was chosen. With the help of the Comunidade Intermunicipal do Alto Minho\cite{comunidadeAltoMinho}, LiDAR data of 2018 was collected, covering 2220 km2, to which later was applied the visualization technique, more specifically LRM. As a result of this process 4 LRM images were generated, corresponding to 4 sub-regions of Alto Minho: Viana do Castelo, Paredes de Coura, Arcos de Valdevez and Parque Nacional da Peneda-Gêrez, having a correspondence of 0.5 meters on the terrain per pixel.
+The region of Alto Minho, Portugal was chosen for the research presented in this dissertation. With the help of the Comunidade Intermunicipal do Alto Minho\cite{comunidadeAltoMinho}, LiDAR data of 2018 was collected, covering 2220 km2, to which later was applied the visualization technique, more specifically LRM. As a result of this process 4 LRM images were generated, corresponding to 4 sub-regions of Alto Minho: Viana do Castelo, Paredes de Coura, Arcos de Valdevez and Parque Nacional da Peneda-Gêrez, having a correspondence of 0.5 meters on the terrain per pixel.
 From these 4 sub-regions, the locations of all known tumuli and hillforts were also provided.
 
-The following table shows the resolution of each image, as well as the number of known annotations and the image size.
+The table \ref{resolucaoLRM} shows the resolution of each image, as well as the number of known annotations and the image size.
 
 \begin{table}[h!]
 \centering
@@ -42,14 +42,16 @@ The following table shows the resolution of each image, as well as the number of
  \hline
 \end{tabular}
 \caption{Description of the dataset used}
+\label{resolucaoLRM}
 \end{table}
 
-The following image shows the joint of the 4 LRM images, corresponding to the entire Alto Minho area where LiDAR data was collected.
+The image \ref{fig:4lrmsjuntas} shows the joint of the 4 LRM images, corresponding to the entire Alto Minho area where LiDAR data was collected.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/LRMfinal.png}
 \caption{The 4 LRM images together, corresponding to Alto Minho}
+\label{fig:4lrmsjuntas}
 \end{figure}
 In the two following images, there are two examples of annotations of tumuli on the left side and hillforts on the right side, using the QGUIS software.
 \begin{figure}[H]
@@ -68,9 +70,9 @@ In the two following images, there are two examples of annotations of tumuli on 
 
 Along with the images the annotations were also provided in the Well-Know Text (WKT) format. This format indicates in polynomial form the geographical location of the site in question.
 
-However, as it is possible to see from the table above, the 4 LRM images are too large, both for training the YOLOv7 model and the Unet model. Because of this, the 4 images were processed in order to obtain a dataset with 640x640 pixels images, being a typical size to train both YOLOv7 and Unet.
+However, as it is possible to see from the table \ref{resolucaoLRM}, the 4 LRM images are too large, both for training the YOLOv7 model and the Unet model. Because of this, the 4 images were processed in order to obtain a dataset with 640x640 pixels images, being a typical size to train both YOLOv7 and Unet.
 
-For this, a Python script was used. In this script, one LRM image was loaded at a time, as well as its annotations. To simplify it, separate datasets were generated for the tumuli and for the forts. Then, the annotations were parsed, and using the LRM image metadata, the geographic coordinates of the image extremities were obtained. With that, the coordinates present in the annotation polynomials were converted to pixels using the mapping function, as illustrated below:
+For this, a Python script was used. In this script, one LRM image was loaded at a time, as well as its annotations. To simplify it, separate datasets were generated for the tumuli and for the hillforts. Then, the annotations were parsed, and using the LRM image metadata, the geographic coordinates of the image extremities were obtained. With that, the coordinates present in the annotation polynomials were converted to pixels using the mapping function, as illustrated below:
 
 \begin{equation}
      pixel = \frac{(coordenate - inMin) * (outMax - outMin)} {(inMax - inMin)} + outMin
@@ -85,11 +87,9 @@ The crop is then saved along with the label in YOLO format and a second label co
 
 The script also splits the dataset into training and validation, choosing 85\% for training and 15\% for validation.
 
-Finally, the bounding boxes are used to store the raw LiDAR data points corresponding to each annotation. These points are stored in separate .las files, with each file containing the points whose coordinates fall within the corresponding bounding box. This approach ensures that the LiDAR data is organized and associated with the specific objects annotated by the bounding boxes.
+Finally, the bounding boxes are used to store the raw LiDAR data points corresponding to each annotation. These points are stored in separate .las files, with each file containing the points whose coordinates fall within the corresponding bounding box. This approach ensures that the LiDAR data is organized and associated with the specific objects annotated by the bounding boxes. The use of these files is explained later.
 
-The use of these files is explained later.
-
-The next two tables show the results of the dataset creation.
+The tables \ref{table:tumulisDataset} and \ref{table:hillfortsDataset} show the results of the dataset creation.
 
 \begin{table}[H]
 \centering
@@ -104,6 +104,7 @@ The next two tables show the results of the dataset creation.
  \hline
 \end{tabular}
 \caption{Tumulis dataset}
+\label{table:tumulisDataset}
 \end{table} 
 
 \begin{table}[H]
@@ -119,6 +120,7 @@ The next two tables show the results of the dataset creation.
  \hline
 \end{tabular}
 \caption{Hillforts dataset}
+\label{table:hillfortsDataset}
 \end{table} 
 
 
@@ -154,7 +156,7 @@ It becomes necessary for the copy-paste algorithm to be able to discard backgrou
 
 Since the model was trained on limited data, it is extremely sensitive, so it ends up detecting many shapes that are actually false positives. Because of this sensitivity, the model is useful in discarding possible crops, and because the background is quite large, even if the model discards many images, the background is not compromised.
 
-A second problem that arises from the copy-paste algorithm is the choice of the paste location. If it is chosen randomly, it is possible that the archaeological site will be over a river, a house, a road, and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Local Based Rank) technique was used. This technique consists in classifying the land areas as subsoil or land use. For this purpose, the Charter of Land Use and Occupation of Portugal\cite{charterPortugal} was used. This charter is basically a comprehensive document that provides detailed information about the different types of land use and occupation in Portugal. It serves as a reliable reference for categorizing land areas into subsoil or land use regions.
+A second problem that arises from the copy-paste algorithm is the choice of the paste location. If it is chosen randomly, it is possible that the archaeological site will be over a river, a house, a road, and so on, which would also lead to a deterioration of the deep learning algorithm. For this reason, the LBR (Location-Based Ranking) technique was used. This technique consists in classifying the land areas as subsoil or land use. For this purpose, the Charter of Land Use and Occupation of Portugal from 2018\cite{charterPortugal} was used. This charter is basically a comprehensive document that provides detailed information about the different types of land use and occupation in Portugal. It serves as a reliable reference for categorizing land areas into subsoil or land use regions.
 
 The LBR technique uses this charter to determine the classification of land areas. By referring to the specific guidelines and classifications outlined in the Charter, the technique can accurately label each area as either subsoil or land-used, thereby providing valuable context for the augmentation process.
 
@@ -178,7 +180,7 @@ In the next two images it is possible to see part of the LRM image of Paredes de
     \caption{Croppred image from Paredes de Coura LRM on the left, and the same image with the LBR on the right}%
 \end{figure}
 
-Using these two methods, the dataset was then created, it is worth mentioning that before pasting the annotation, one of the following geometric transformations was applied: flip left to right, flip top to bottom, rotate 90, 180 or 270 degrees and transpose. For each annotation a transformation was randomly selected selectively and then applied.
+Using these two methods, the dataset was then created. It is worth mentioning that before pasting the annotation, one of the following geometric transformations was applied: flip left to right, flip top to bottom, rotate 90, 180 or 270 degrees and transpose. For each annotation a transformation was randomly selected selectively and then applied.
 
 Additionally, 10\% background was added, following yolov5's recommendations.
 
@@ -195,7 +197,7 @@ In the following two images, there are two examples of the copy paste augmentati
     \caption{Examples of copy paste augmentation}%
 \end{figure}
 
-The two following tables contain the results from copy paste augmentation.
+The tables \ref{table:tumuliscopypastedataste} and \ref{table:hillfortscopypastedataste} contain the results from copy paste augmentation.
 
 \begin{table}[H]
 \centering
@@ -210,6 +212,7 @@ The two following tables contain the results from copy paste augmentation.
  \hline
 \end{tabular}
 \caption{Tumulis copy paste dataset}
+\label{table:tumuliscopypastedataste}
 \end{table} 
 
 \begin{table}[H]
@@ -225,6 +228,7 @@ The two following tables contain the results from copy paste augmentation.
  \hline
 \end{tabular}
 \caption{Hillforts copy paste dataset}
+\label{table:hillfortscopypastedataste}
 \end{table} 
 
 
@@ -251,7 +255,7 @@ The next images show examples of the same annotation but on different images res
     \caption{Example of the same hillforts but in different position of the image}%
 \end{figure}
 
-The next two tables show the results of the dataset creation.
+The tables \ref{table:tumulissimpledataset} and \ref{table:hillfortssimpledataset} show the results of the dataset creation.
 
 \begin{table}[H]
 \centering
@@ -266,6 +270,7 @@ The next two tables show the results of the dataset creation.
  \hline
 \end{tabular}
 \caption{Tumulis simple dataset}
+\label{table:tumulissimpledataset}
 \end{table} 
 
 \begin{table}[H]
@@ -281,4 +286,5 @@ The next two tables show the results of the dataset creation.
  \hline
 \end{tabular}
 \caption{Hillforts simple dataset}
+\label{table:hillfortssimpledataset}
 \end{table} 

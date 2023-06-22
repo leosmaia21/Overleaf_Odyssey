@@ -5,12 +5,10 @@
 \begin{introduction}
 In this chapter, it will be discussed various ways of applying artificial intelligence models to archaeology.
 \end{introduction}
-In this section it will be discussed techniques with which it is possible to obtain not only geographic but also geological information. 
+Remote sensing is the technique of obtaining information about an object, an area, or a phenomenon without direct contact between the sensor and the object or area being observed.
 
-Remote sensing is the technique of obtaining information about an object, area, or phenomenon without direct contact between the sensor and the object or area being observed.
-
-It emerged for military purposes during the First World War (1914-1918), when airplanes were equipped with cameras. The information recorded in the photographs was used for target recognition and military planning.
-Later, this type of techniques was widely spread in the civil society, where it was used for various purposes. 
+Its use dates back to the early 20th century\cite{asmr}, and it was then used heavily for military purposes during World War I (1914-1918)\cite{war1}, when airplanes were equipped with cameras. The information recorded in the photographs was used for target recognition and military planning.
+Later, this type of technique was widely spread in civil society, where it was used for various purposes. 
 
 In the field of this dissertation, its use is for the purpose of indicating geographical regions likely to contain archaeological objects.
 
@@ -31,7 +29,7 @@ In 1906, a British general used a military hot air balloon to take vertical and 
 
 
 \subsection{Photography}
-The use of photography in archaeology has become more common in the last 110 years, as one of the methods that allows the discovery of archaeological sites after they have been destroyed, either by man or by natural phenomena. 
+The use of photography in archaeology has become more common in the last 110 years\cite{asmr}, as one of the methods that allows the discovery of archaeological sites after they have been destroyed, either by man or by natural phenomena. 
 
 There are traces of ancient, man-made transformations of the landscape that can only be seen from above, and this is where photograrchaeology comes in.
 
@@ -52,13 +50,13 @@ The following images show the different bands used in Landsat-8 imagery.
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/landsat1.png}
-\caption{Landsat-8 bands from the OLI sensor}
+\caption{Landsat-8 bands from the OLI sensor\cite{landsat}}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/landsat2.png}
-\caption{Landsat-8 bands from the TIRS sensor}
+\caption{Landsat-8 bands from the TIRS sensor\cite{landsat}}
 \end{figure}
 
 Hyperspectral imaging, on the other hand, typically uses hundreds or thousands of narrower bands (typically smaller than 20nm).
@@ -95,7 +93,7 @@ The next image shows the same zone but filtered showing only the points classifi
 
 For the implementation of deep learning algorithms, one of the possibilities is to use directly the filtered Lidar radar data, i.e. to use the \ac{dtm}, as it is shown in the article \cite{deeplearningRawLidarData}. However, deep learning methods may have certain limitations, as many human resources are needed to make the annotations. In the case of archaeological annotations, if done by non-professionals, they may contain errors due to lack of knowledge of the scene and structure of the object in question. 
 
-Another option is to pre-process the point cloud to create an image with the relief information. There are several techniques to create such images. The article \cite{reliefModel} lists 13 techniques. However, we will only discuss the two most effective according to the article, e2MSTP and MSTP, and the LRM used in the thesis.
+Another option is to pre-process the point cloud to create an image with the relief information. There are several techniques to create such images. In the article\cite{reliefModel} 13 methods are listed. However, we will only discuss the two most effective according to the article, e2MSTP and MSTP, and the LRM used in the thesis.
 
 \subsection{MSTP and Enhanced MSTP}
 One of the most efficient techniques used is \ac{mstp}. As explained in the \cite{mstp} article, it works well for visual interpretation and semi-automatic feature detection. By focusing on the topographical context of the structures rather than the structures themselves, it is particularly good for heterogeneous objects. Enhanced MSTP adds a morphological visualization technique to MSTP, creating a more detailed image.
@@ -110,9 +108,9 @@ The following image shows an MSTP image, a morphological visualization, and the 
 
 It is important to note that this technique does not provide topographical measurements since the RGB values do not represent elevations or slopes.
 
-According to article \cite{emstp}, enhanced MSTP allowed researchers to obtain a detection accuracy of 77\%, proving thia to be a good technique especially if combined with the right deep learning model.
+According to \cite{emstp}, enhanced MSTP allowed researchers to obtain a detection accuracy of 77\%, proving thia to be a good technique especially if combined with the right deep learning model.
 
-\subsection{\ac{lrm}}
+\subsection{Local relief model (LRM)}
 
 Local Relief Model (LRM) is one of the most widely used techniques for archaeological purposes. In \ac{lrm} small-scale elevation differences are represented after the landscape is removed from the data, as in \ac{dtm}. 
 
@@ -146,7 +144,7 @@ Finally, we have the output layer, which can be a sigmoid if the result is binar
 \end{figure}
 
 \subsection{Machine Learning}
-The main difference between deep learning and machine learning is the architecture and the complexity of what is being learned. One of the differences is how much human interaction is involved; on the one hand, deep learning can learn how to extract features from data, but machine learning algorithms require a human to first extract features from the data and then feed them into the algorithm.
+The main difference between deep learning and machine learning lies in the architecture and the level of complexity in the learned tasks. One notable distinction is the degree of human involvement. In deep learning, the model learns to extract features from the data on its own, while in traditional machine learning, humans need to manually extract features from the data and then provide them as input to the algorithm.
 
 \begin{figure}[H]
 \centering
@@ -154,6 +152,6 @@ The main difference between deep learning and machine learning is the architectu
 \caption{Machine Learning VS Deep learning\cite{deepLearningVSmachineLearning}}
 \end{figure}
 
-The use of machine learning methods in archaeology using the raw LiDAR data is a technique that has been used. The unsupervised clustering based machine learning methods are more suitable for irregular object\cite{rawLidarjoaofonte}.
+The use of machine learning methods in archaeology using the \ac{lidar} data without preprocessing is a technique that has been used. The unsupervised clustering based machine learning methods are more suitable for irregular object\cite{rawLidarjoaofonte}.
 
 When it comes to cultural heritage, surface or structural defects often appear in the form of irregular geometric features. These can include weathering, cracks, and partial defects. As a result, these algorithms are exceptionally well suited for identifying and extracting surface defects in such cases.
