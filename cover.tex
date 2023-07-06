@@ -58,6 +58,8 @@
 %% For prettier pages
 \usepackage{lmodern}
 
+\usepackage[maxbibnames=99]{biblatex}
+
 %% We will use english and portuguese
 \usepackage[english,portuguese]{babel}
 
@@ -187,8 +189,9 @@ And finally, to all my friends, especially Guilherme Maniezo, who has accompanie
 %%% Don't remove the \selectlanguage statement or you will end with incorrect hyphenation
 %% Mandatory Keywords and Abstract in Portuguese
 \Abstract{Palavras Chave}{Arqueologia, Deep learning, LiDAR, Unet, YOLOv7}
-         {Resumo}{\selectlanguage{portuguese}Esta dissertação foi desenvolvida no âmbito do projeto ODYSEY. O projeto tem como objetivo desenvolver uma plataforma destinada a arqueólogos que contenha informação geográfica.
-Dentro do âmbito do projeto, esta dissertação foca-se no uso de algoritmos de deep learning, com o objetivo de identificar sítios arqueológicos através de imagens provenientes de dados recolhidos com LiDAR. A zona escolhida para o projeto foi o Alto Minho e os objetos de estudo foram mamoas e castros. Para alcançar esse objetivo foi preciso processar essas imagens de modo a criar o dataset, assim como os métodos de data augmentation. Depois disso, foram usados dois algoritmos de deep learnin: um de object detection e o outro de semantic segmentation. YOLOv7 e Unet, respetivamente. No fim foi feito inferências nas imagens providas de modo a tentar encontrar novos sítios arqueológicos ainda não anotados.}
+         {Resumo}{\selectlanguage{portuguese}Esta dissertação foi desenvolvida no âmbito do projeto ODYSEY, que visa o desenvolvimento de uma plataforma destinada a arqueólogos. Neste contexto, esta dissertação tem como objetivo a identificação de sítios arqueológicos a partir de imagens formadas através dos dados fornecidos por um sistema LiDAR.
+A área de estudo é o Alto Minho, uma sub-região portuguesa pertencente à região Norte, e famosa pela preservação de estruturas históricas. Este trabalho centra-se no estudo das mamoas, que são construções de pedra e areia que teriam a função de esconder e proteger sepulturas, e dos castelos, que são construções urbanas da Idade do Cobre e da Idade do Ferro. De uma forma clara, o objetivo é elaborar um sistema capaz de localizar estes objectos históricos a partir de uma imagem aérea. 
+O trabalho vai desde a criação da base de dados, a implementação de modelos de deep learning, até a inferência dos resultados..}
 
 %%% OPTIONAL: you can write the keywords and
 %%%  abstract in other languages. You can repeat
@@ -198,19 +201,20 @@ Dentro do âmbito do projeto, esta dissertação foca-se no uso de algoritmos de
 %%% You can modify the language to any other supported by Latex
 %% Optional Keywords and Abstract in additional languages.
 \Abstract{Keywords}{Archaeology, Deep learning, LiDAR, Unet, YOLOv7.}
-         {Abstract}{\selectlanguage{english}This dissertation was developed within the ODYSEY project. The project aims to develop a platform for archeologists that contains geographic information.
-Within the ambit of the project, this dissertation focuses on the use of deep learning algorithms, with the objective of identifying archaeological sites, through images coming from data collected with LiDAR. The area chosen for the project was Alto Minho and the objects of study were tumuli and hillforts. To achieve this goal it was necessary to process these images, in order to create the dataset, as well as to create data augmentation methods, after that two deep learning algorithms were used, one for object detection and one for semantic segmentation, YOLOv7 and Unet respectively. At the end, we made inferences on the provided images in order to try to find new archaeological sites not yet annotated.}
+         {Abstract}{\selectlanguage{english}This dissertation was developed within the ODYSEY project, which aims to develop a platform intended for archaeologists. Within this context, this dissertation aims to identify archaeological sites from images formed through the data provided by a LiDAR system.
+The study area is Alto Minho, a Portuguese sub-region belonging to the Northern region, and famous for the preservation of historical structures. This work focuses on the study of tumuli, which are buildings of stone and sand that would have the function of hiding and protecting graves, and the hillforts, which are urban constructions of the Copper Age and Iron Age. In a clear way, the goal is to elaborate a system capable of locating these historical objects from an aerial image. 
+The work ranges from the creation of the database, the implementation of deep learning models, to the inference of the results.}
 
 %%% Edit the Jury President information.
 %% First Member will be the President of the Jury
-\JuriMember{Prof. Doutor Telmo Reis Cunha}{professor associado da Universidade de Aveiro}
+\JuriMember{Prof. Doutor Amaro Fernandes de Sousa}{Professor Auxiliar da Universidade de Aveiro}
 
 %%% Repeat the above declaration for additional
 %%%  members of the jury as many times as necessary.
 %% Additional members of the Jury
-\JuriMember{Prof. Doutor António José Ribeiro Neves}{professor auxiliar da Universidade de Aveiro}
-\JuriMember{Prof. Doutor José Silvestre Silva}{professor auxiliar do Instituto
-Universitário Militar}
+\JuriMember{Prof. Doutor António José Ribeiro Neves}{Professor Auxiliar da Universidade de Aveiro}
+\JuriMember{Prof. Doutor José Silvestre Serra da Silva}{Professor Associado Com
+Agregação, Academia Militar - Departamento de Ciências e Tecnologia de Engenharia}
 
 
 

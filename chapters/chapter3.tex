@@ -53,13 +53,14 @@ The image \ref{fig:4lrmsjuntas} shows the joint of the 4 LRM images, correspondi
 \caption{The 4 LRM images together, corresponding to Alto Minho}
 \label{fig:4lrmsjuntas}
 \end{figure}
-In the two following images, there are two examples of annotations of tumuli on the left side and hillforts on the right side, using the QGUIS software.
+In the image \ref{Example of annotations of tumuli on the left side and hillforts on the right side, using QGUIS}, there are two examples of annotations of tumuli on the left side and hillforts on the right side, using the QGUIS software.
 \begin{figure}[H]
     \centering
     \subfloat{{\includegraphics[width=7cm]{images/qgis/qgis2Mamoas.png} }}%
     \qquad
     \subfloat{{\includegraphics[width=7cm]{images/qgis/qgis3Castros.png} }}%
     \caption{Example of annotations of tumuli on the left side and hillforts on the right side, using QGUIS}%
+    \label{Example of annotations of tumuli on the left side and hillforts on the right side, using QGUIS}
 \end{figure}
 
 
@@ -169,7 +170,7 @@ The LBR technique uses this charter to determine the classification of land area
 
 Of the 83 classes present on the chart, only the areas with forest, sparse vegetation and agriculture were kept, and all the others were removed.
 
-In the next two images it is possible to see part of the LRM image of Paredes de Coura, without and with the proposed LBR. The green zones represent the areas of interest, resulted from the charter mentioned.
+In the image \ref{Croppred image from Paredes de Coura LRM on the left, and the same image with the LBR on the right}, it is possible to see part of the LRM image of Paredes de Coura, without and with the proposed LBR. The green zones represent the areas of interest, resulted from the charter mentioned.
 
 
 \begin{figure}[H]
@@ -178,9 +179,10 @@ In the next two images it is possible to see part of the LRM image of Paredes de
     \qquad
     \subfloat{{\includegraphics[width=7cm]{images/carta/com.png} }}%
     \caption{Croppred image from Paredes de Coura LRM on the left, and the same image with the LBR on the right}%
+    \label{Croppred image from Paredes de Coura LRM on the left, and the same image with the LBR on the right}
 \end{figure}
 
-Using these two methods, the dataset was then created. It is worth mentioning that before pasting the annotation, one of the following geometric transformations was applied: flip left to right, flip top to bottom, rotate 90, 180 or 270 degrees and transpose. For each annotation a transformation was randomly selected selectively and then applied.
+Using these two methods, the dataset was then created. It is worth mentioning that before pasting the annotation, one of the following geometric transformations was applied: flip left to right, flip top to bottom, rotate 90, 180 or 270 degrees and transpose. For each annotation, a transformation was randomly selected and then applied.
 
 Additionally, 10\% background was added, following yolov5's recommendations.
 
@@ -188,13 +190,14 @@ Along with the respective labels for the yolo, labels with the segmentation were
 
 For the tumuli, being a relatively small object, it was chosen to add 8 tumulis per image, for the castros, being larger objects, it was chosen to add 5 hillforts per image.
 
-In the following two images, there are two examples of the copy paste augmentation, on the left side tumuli and on the right side hillforts.
+In the image \ref{Examples of copy paste augmentation}, there are two examples of the copy paste augmentation, on the left side tumuli and on the right side hillforts.
 \begin{figure}[H]
     \centering
     \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/aug/mamoas_aug_example.png} }}%
     \qquad
     \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/aug/castros_aug_example.png} }}%
     \caption{Examples of copy paste augmentation}%
+    \label{Examples of copy paste augmentation}
 \end{figure}
 
 The tables \ref{table:tumuliscopypastedataste} and \ref{table:hillfortscopypastedataste} contain the results from copy paste augmentation.
@@ -237,7 +240,7 @@ The second augmentation algorithm,  which it will be referred to as simple augme
 
 This method was applied several times for the same annotation enabling the generation of annotated data that retains the same objects but positions them differently within the image, resulting in varied backgrounds.
 
-The next images show examples of the same annotation but on different images resulting from the augmentation.
+The images \ref{Example of the same tumuli but in different position of the image} and \ref{Example of the same hillforts but in different position of the image} show examples of the same annotation but on different images resulting from the augmentation.
 
 \begin{figure}[H]
     \centering
@@ -245,6 +248,7 @@ The next images show examples of the same annotation but on different images res
     \qquad
     \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/mamoas2.png} }}%
     \caption{Example of the same tumuli but in different position of the image}%
+    \label{Example of the same tumuli but in different position of the image}
 \end{figure}
 
 \begin{figure}[H]
@@ -253,6 +257,7 @@ The next images show examples of the same annotation but on different images res
     \qquad
     \subfloat{{\includegraphics[width=7cm]{images/datasetExemples/maia/castros2.png} }}%
     \caption{Example of the same hillforts but in different position of the image}%
+    \label{Example of the same hillforts but in different position of the image}
 \end{figure}
 
 The tables \ref{table:tumulissimpledataset} and \ref{table:hillfortssimpledataset} show the results of the dataset creation.
@@ -288,3 +293,6 @@ The tables \ref{table:tumulissimpledataset} and \ref{table:hillfortssimpledatase
 \caption{Hillforts simple dataset}
 \label{table:hillfortssimpledataset}
 \end{table} 
+
+
+Having implemented these augmentation algorithms, the dataset was significantly augmented, however with the simple augmentation, the results does not reach the miminum recommended by YOLOv5, it was chosen not to increase more the dataset because, being only a transformation of the image, increasing it more could lead to a similar images.

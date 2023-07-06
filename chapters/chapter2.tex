@@ -36,7 +36,7 @@ There are traces of ancient, man-made transformations of the landscape that can 
 \begin{figure}[h]
 \centering
 \includegraphics[height=7cm]{images/foto.png}
-\caption{Aerial photograph in 1945 of Beijing \cite{asmr}}
+\caption[Aerial photograph in 1945 of Beijing]{Aerial photograph in 1945 of Beijing \cite{asmr}}
 \end{figure}
 
 \subsection{Hyperspectral and multispectral image}
@@ -45,18 +45,20 @@ Unlike photography, which uses only frequencies within the visible range, hypers
 
 Multispectral has wavelengths usually between the visible and infrared and typically uses 3 to 15 bands with a length greater than 20 nm. An example of the use of multispectral imagery is the Landsat-8 satellite, which produces 11 images from different bands, all but 3 of which have a resolution of 30 meters.
 
-The following images show the different bands used in Landsat-8 imagery.
+The images  \ref{olisensors} and \ref{tirssensors} show the different bands used in Landsat-8 imagery.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10cm]{images/landsat1.png}
-\caption{Landsat-8 bands from the OLI sensor\cite{landsat}}
+\includegraphics[width=14cm]{images/landsat1.png}
+\caption[Landsat-8 bands from the OLI sensor]{Landsat-8 bands from the OLI sensor\cite{landsat}}
+\label{olisensors}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=10cm]{images/landsat2.png}
-\caption{Landsat-8 bands from the TIRS sensor\cite{landsat}}
+\includegraphics[width=14cm]{images/landsat2.png}
+\caption[Landsat-8 bands from the TIRS sensor]{Landsat-8 bands from the TIRS sensor\cite{landsat}}
+\label{tirssensors}
 \end{figure}
 
 Hyperspectral imaging, on the other hand, typically uses hundreds or thousands of narrower bands (typically smaller than 20nm).
@@ -70,23 +72,25 @@ It is also worth mentioning that buried archaeological objects can have their ch
 LiDAR has become an essential part of archaeological prospecting. By attaching it to a drone, for example, it is possible to cover large areas in order to discover new sites with archaeological potential.  Its operation is based on emitting high-frequency light beams and then measuring the time it takes for the light beam to reach the object and return.
 By analyzing the characteristics of the returned signal, it is possible to create a 3D map of the area in question.
 
-The following image shows an example of a point cloud from an area in Viana do Castelo.
+The image \ref{Point cloud from Viana do Castelo} shows an example of a point cloud from an area in Viana do Castelo.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/pointcloudViana.png}
 \caption{Point cloud from Viana do Castelo}
+\label{Point cloud from Viana do Castelo}
 \end{figure}
 
 In the image each color of the point represents the category the point belongs to - for example green represents vegetation and brown represents soil.
 
 As a result of the work of archaeologists and specialists, airborne lidar has been successfully used to detect archaeological features around the world. However, in order to be useful, it is first necessary to classify and fit the points in the point cloud, which is a crucial process to identify and remove points that do not belong to the ground in order to be able to detect archaeological features. The result of this filtering is called a \ac{dtm}. However, it should be noted that this method is not perfect and it is possible to filter too much, in this case filtering points that belong to archaeological objects.
 
-The next image shows the same zone but filtered showing only the points classified as soil.
+The image \ref{Point cloud from Viana do Castelo filtered} shows the same zone but filtered showing only the points classified as soil.
 \begin{figure}[H]
 \centering
 \includegraphics[width=10cm]{images/pointcloudVianafiltrado.png}
 \caption{Point cloud from Viana do Castelo filtered}
+\label{Point cloud from Viana do Castelo filtered}
 \end{figure}
 
 \section{Relief Visualization Techniques}
@@ -96,14 +100,15 @@ For the implementation of deep learning algorithms, one of the possibilities is 
 Another option is to pre-process the point cloud to create an image with the relief information. There are several techniques to create such images. In the article\cite{reliefModel} 13 methods are listed. However, we will only discuss the two most effective according to the article, e2MSTP and MSTP, and the LRM used in the thesis.
 
 \subsection{MSTP and Enhanced MSTP}
-One of the most efficient techniques used is \ac{mstp}. As explained in the \cite{mstp} article, it works well for visual interpretation and semi-automatic feature detection. By focusing on the topographical context of the structures rather than the structures themselves, it is particularly good for heterogeneous objects. Enhanced MSTP adds a morphological visualization technique to MSTP, creating a more detailed image.
+One of the most efficient techniques used is \ac{mstp}. As explained in \cite{mstp}, it works well for visual interpretation and semi-automatic feature detection. By focusing on the topographical context of the structures rather than the structures themselves, it is particularly good for heterogeneous objects. Enhanced MSTP adds a morphological visualization technique to MSTP, creating a more detailed image.
 
-The following image shows an MSTP image, a morphological visualization, and the result of combining the two, the enhanced MSTP image.
+The image \ref{MSTP and Enhanced MSTP} shows an MSTP image, a morphological visualization, and the result of combining the two, the enhanced MSTP image.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{figs/mstp.png}
-\caption{MSTP and Enhanced MSTP \cite{emstp}}
+\includegraphics[width=\textwidth]{figs/mstp.png}
+\caption[MSTP and Enhanced MSTP]{MSTP and Enhanced MSTP \cite{emstp}}
+\label{MSTP and Enhanced MSTP}
 \end{figure}
 
 It is important to note that this technique does not provide topographical measurements since the RGB values do not represent elevations or slopes.
@@ -140,7 +145,7 @@ Finally, we have the output layer, which can be a sigmoid if the result is binar
 \begin{figure}[H]
 \centering
 \includegraphics[width=15cm]{images/cnn.png}
-\caption{Example of neural network \cite{mediumCNN}}
+\caption[Example of neural network]{Example of neural network \cite{mediumCNN}}
 \end{figure}
 
 \subsection{Machine Learning}
@@ -149,9 +154,9 @@ The main difference between deep learning and machine learning lies in the archi
 \begin{figure}[H]
 \centering
 \includegraphics[width=15cm]{images/deepLearningVSmachineLearning.jpeg}
-\caption{Machine Learning VS Deep learning\cite{deepLearningVSmachineLearning}}
+\caption[Machine Learning VS Deep learning]{Machine Learning VS Deep learning\cite{deepLearningVSmachineLearning}}
 \end{figure}
 
-The use of machine learning methods in archaeology using the \ac{lidar} data without preprocessing is a technique that has been used. The unsupervised clustering based machine learning methods are more suitable for irregular object\cite{rawLidarjoaofonte}.
+The use of machine learning methods in archaeology using the \ac{lidar} data without preprocessing is a technique that has been used. The unsupervised clustering based machine learning methods are more suitable for irregular object\cite{deeplearningRawLidarData}.
 
-When it comes to cultural heritage, surface or structural defects often appear in the form of irregular geometric features. These can include weathering, cracks, and partial defects. As a result, these algorithms are exceptionally well suited for identifying and extracting surface defects in such cases.
+When it comes to cultural heritage, surface or structural defects often appear in the form of irregular geometric features. These can include weathering, cracks, and partial defects. As a result, these algorithms are exceptionally well suited for identifying and extracting surface defects in such cases\cite{deeplearningRawLidarData}.

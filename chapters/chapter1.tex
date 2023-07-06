@@ -25,6 +25,15 @@ The objective of the ODYSSEY project, funded by the COMPETE - Competitiveness an
 
 The project is divided into two parts, the pre-processing of LiDAR data and the detection of archaeological sites. In this dissertation only the detection part was done, having already access to the processed data, in the form of 4 \ac{lrm} images, each representing a sub-area of Alto Minho.
 
+
+\begin{figure}[H]
+\centering
+\includegraphics[height=6cm]{images/exampleLRM.png}
+\caption{Example of a region from the LRM image of Viana do Castelo}
+
+\end{figure}
+
+
 To achieve this goal, the 4 LRM images were processed to create a dataset to train the two chosen deep learning models, \ac{yolo} and Unet, and augmentation techniques were applied. Finally, a Local Outlier Factor (LOF) model was trained on the LiDAR data to validate the results.
 
 Finally, full inference was performed on all 4 \ac{lrm} images in an attempt to find undiscovered archaeological sites.

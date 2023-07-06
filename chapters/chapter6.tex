@@ -6,16 +6,16 @@ This section highlights the insights gained from the analysis of the work that i
 \end{introduction}
 
 
-Locating archaeological sites is a difficult task that requires several steps. Over the years, methods have evolved from intensive human sweeping of the terrain to more sophisticated methods such as lidar. These modern methods can produce an enormous amount of data. This paper describes an attempt to locate archaeological sites using deep learning methods. As can be seen in the paper, two deep learning architectures were used, YOLOv7 and Unet. 
+Locating archaeological sites is a difficult task that requires several steps. Over the years, methods have evolved from intensive human sweeping of the terrain to more sophisticated methods such as LiDAR. These modern methods can produce an enormous amount of data. This paper describes an attempt to locate archaeological sites using deep learning methods. As can be seen in the paper, two deep learning architectures were used, YOLOv7 and Unet. 
 
-The whole procedure allowed us to obtain successful results even with a small amount of initial data and two archaeological objects with very different shapes, tumuli with a much more regular shape and size, and castros that can have different shapes and sizes.
+The whole procedure allowed us to obtain successful results even with a small amount of initial data and two archaeological objects with very different shapes, tumuli with a much more regular shape and size, and hillforts that can have different shapes and sizes.
 
 
-As expected, YOLOv7 worked much better on the tumuli than on the hillforts, since it is an object detection model, and tumuli have a much more uniform shape. On the other hand, YOLOv7 performed very poorly on hillforts, probably because of their irregular shape. 
+One interesting fact was that YOLOv7 worked much better on the mounds than on the hillforts, because it is an object detection model, and mounds have a much more uniform shape. On the other hand, YOLOv7 performed very poorly on hillforts, probably because of their irregular shape. The fact that mounds have a uniform shape was one of the reasons to try a segmentation model. 
 
-Unet was a surprise, although it is an old model architecture, it performed well on both tumuli and hillforts.
+Unet, although it is an old model architecture, it performed well on both tumulis and hillforts.
 
-It was also found that the copy paste enhancement method used worked much better with Unet than with YOLOv7, this is most likely due to the fact that Unet focuses more on the object rather than the background, which is particularly useful due to the fact that copy paste can create collages in unrealistic places.
+It was also found that the copy-paste augmentation method works much better with Unet than with YOLOv7, most likely because Unet focuses more on the object rather than the background, which is especially useful due to the fact that copy-paste can create collages in unrealistic places.
 
 For future work, in an attempt to improve the results, other methods of creating the images could be used, such as the enhanced MSTP. For validation, other models could be tried, or not all the annotations could be used to get some information on how the model performed, and those annotations could be used to validate the model.
 
